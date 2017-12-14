@@ -5,7 +5,11 @@ var participanteSchema = require('./participante.js');
 var Schema = mongoose.Schema;
 
 var JogoSchema = new Schema({
-  participantes: [participanteSchema.Schema],
+  participantes: {
+    type: [participanteSchema.Schema],
+    required: true,
+    unique: false
+  },
   data: {
     type: Date,
     default: Date.now,

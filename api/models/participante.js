@@ -5,8 +5,8 @@ var Schema = mongoose.Schema;
 var ParticipanteSchema = new Schema({
   nomeJogador: {
     type: String,
-    unique: true,
-    required: 'Nome do jogador é obrigatório!'
+    required: 'Nome do jogador é obrigatório!',
+    unique: false
   },
   lugar: {
     type: Number,

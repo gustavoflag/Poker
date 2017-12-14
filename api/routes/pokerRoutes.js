@@ -17,7 +17,7 @@ module.exports = function(app) {
     .get(jogadorController.listar)
     .post(jogadorController.inserir);
 
-  app.route('/jogador/:pontuacaoId')
+  app.route('/jogador/:jogadorId')
       .get(jogadorController.consultar)
       .put(jogadorController.alterar)
       .delete(jogadorController.excluir);
