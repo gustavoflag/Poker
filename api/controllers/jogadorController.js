@@ -1,8 +1,8 @@
 var mongoose = require('mongoose'),
-Pontuacao = mongoose.model('Pontuacao');
+Jogador = mongoose.model('Jogador');
 
 exports.listar = function(req, res) {
-  Pontuacao.find({}, function(err, task) {
+  Jogador.find({}, function(err, task) {
     if (err)
       res.send(err);
     res.json(task);
@@ -10,8 +10,8 @@ exports.listar = function(req, res) {
 };
 
 exports.inserir = function(req, res) {
-  var novaPontuacao = new Pontuacao(req.body);
-  novaPontuacao.save(function(err, task) {
+  var novoJogador = new Jogador(req.body);
+  novoJogador.save(function(err, task) {
     if (err)
       res.send(err);
     res.json(task);
@@ -19,7 +19,7 @@ exports.inserir = function(req, res) {
 };
 
 exports.consultar = function(req, res) {
-  Pontuacao.findById(req.params.pontuacaoId, function(err, task) {
+  Jogador.findById(req.params.jogadorId, function(err, task) {
     if (err)
       res.send(err);
     res.json(task);
@@ -27,7 +27,7 @@ exports.consultar = function(req, res) {
 };
 
 exports.alterar = function(req, res) {
-  Pontuacao.findOneAndUpdate({_id: req.params.pontuacaoId}, req.body, {new: true}, function(err, task) {
+  Jogador.findOneAndUpdate({_id: req.params.jogadorId}, req.body, {new: true}, function(err, task) {
     if (err)
       res.send(err);
     res.json(task);
@@ -35,11 +35,11 @@ exports.alterar = function(req, res) {
 };
 
 exports.excluir = function(req, res) {
-  Pontuacao.remove({
-    _id: req.params.pontuacaoId
+  Jogador.remove({
+    _id: req.params.jogadorId
   }, function(err, task) {
     if (err)
       res.send(err);
-    res.json({ message: 'Pontuação excluída' });
+    res.json({ message: 'Jogador excluído' });
   });
 };

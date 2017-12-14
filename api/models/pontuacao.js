@@ -4,10 +4,13 @@ var Schema = mongoose.Schema;
 
 var PontuacaoSchema = new Schema({
   lugar:{
-    type: Number
+    type: Number,
+    unique: true,
+    required: 'Lugar (colocação) é obrigatório!'
   },
   pontos:{
-    type: Number
+    type: Number,
+    required: '"Pontos" é obrigatório!'
   }
 });
 

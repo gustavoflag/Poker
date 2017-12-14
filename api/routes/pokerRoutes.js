@@ -1,14 +1,34 @@
 'use strict';
 module.exports = function(app) {
   var pontuacaoController = require('../controllers/pontuacaoController.js');
+  var jogadorController = require('../controllers/jogadorController.js');
+  var jogoController = require('../controllers/jogoController.js');
 
-  // todoList Routes
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
     .post(pontuacaoController.inserir);
 
-  /*app.route('/tasks/:taskId')
-    .get(todoList.read_a_task)
-    .put(todoList.update_a_task)
-    .delete(todoList.delete_a_task);*/
+  app.route('/pontuacao/:pontuacaoId')
+    .get(pontuacaoController.consultar)
+    .put(pontuacaoController.alterar)
+    .delete(pontuacaoController.excluir);
+
+  app.route('/jogador')
+    .get(jogadorController.listar)
+    .post(jogadorController.inserir);
+
+  app.route('/jogador/:pontuacaoId')
+      .get(jogadorController.consultar)
+      .put(jogadorController.alterar)
+      .delete(jogadorController.excluir);
+
+  app.route('/jogo')
+    .get(jogoController.listar)
+    .post(jogoController.inserir);
+
+  app.route('/jogo/:jogoId')
+      .get(jogoController.consultar)
+      .put(jogoController.alterar)
+      .delete(jogoController.excluir);
+
 };
