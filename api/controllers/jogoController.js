@@ -22,17 +22,35 @@ exports.inserir = function(req, res) {
   });
 
   novoJogo.participantes.forEach(function (participante){
-    Jogador.findOne({ nome: participante.nomeJogador }, function(err, jogadorParticipante) {
+    Pontuacao.findOne({ lugar: participante.lugar }, function(err, pontuacaoParticipante) {
       if (err)
         res.send(err);
 
-      if (jogadorParticipante){
-        Pontuacao.findOne({ lugar: participante.lugar }, function(err, pontuacaoParticipante) {
+      if (pontuacaoParticipante){
+        Jogador.findOne({ nome: participante.nomeJogador }, function(err, jogadorParticipante) {
           if (err)
             res.send(err);
 
-          if (pontuacaoParticipante){
+          if (!jogadorParticipante){
+            var novoJogador = new Jogador({ nome: participante.nomeJogador });
+            novoJogador.save(function(err, jog) {
+              if (err)
+                res.send(err);
+
+              jogadorParticipante = jog;
+
+              jogadorParticipante.pontos += pontuacaoParticipante.pontos;
+              jogadorParticipante.jogos++;
+
+              jogadorParticipante.save(function(err, task) {
+                  if (err)
+                    res.send(err);
+              });
+            });
+          }
+          else {
             jogadorParticipante.pontos += pontuacaoParticipante.pontos;
+            jogadorParticipante.jogos++;
 
             jogadorParticipante.save(function(err, task) {
                 if (err)
@@ -62,6 +80,35 @@ exports.alterar = function(req, res) {
 };
 
 exports.excluir = function(req, res) {
+  Jogo.findById(req.params.jogoId, function(err, jogo) {
+    if (err)
+      res.send(err);
+
+    jogo.participantes.forEach(function (participante){
+      Jogador.findOne({ nome: participante.nomeJogador }, function(err, jogadorParticipante) {
+        if (err)
+          res.send(err);
+
+        if (jogadorParticipante){
+          Pontuacao.findOne({ lugar: participante.lugar }, function(err, pontuacaoParticipante) {
+            if (err)
+              res.send(err);
+
+            if (pontuacaoParticipante){
+              jogadorParticipante.pontos -= pontuacaoParticipante.pontos;
+              jogadorParticipante.jogos--;
+
+              jogadorParticipante.save(function(err, task) {
+                  if (err)
+                    res.send(err);
+              });
+            }
+          });
+        }
+      });
+    });
+  });
+
   Jogo.remove({
     _id: req.params.jogoId
   }, function(err, task) {
