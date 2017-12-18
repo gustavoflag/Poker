@@ -17,18 +17,21 @@ module.exports = function(app) {
     .get(jogadorController.listar)
     .post(jogadorController.inserir);
 
+  app.route('/classificacao')
+    .get(jogadorController.classificacao);
+
   app.route('/jogador/:jogadorId')
-      .get(jogadorController.consultar)
-      .put(jogadorController.alterar)
-      .delete(jogadorController.excluir);
+    .get(jogadorController.consultar)
+    .put(jogadorController.alterar)
+    .delete(jogadorController.excluir);
 
   app.route('/jogo')
     .get(jogoController.listar)
     .post(jogoController.inserir);
 
   app.route('/jogo/:jogoId')
-      .get(jogoController.consultar)
-      .put(jogoController.alterar)
-      .delete(jogoController.excluir);
+    .get(jogoController.consultar)
+    .put(jogoController.alterar)
+    .delete(jogoController.excluir);
 
 };

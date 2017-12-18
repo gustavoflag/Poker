@@ -1,3 +1,4 @@
+var sortBy = require('sort-by');
 var mongoose = require('mongoose'),
 Jogo = mongoose.model('Jogo'),
 Jogador = mongoose.model('Jogador'),
@@ -5,10 +6,10 @@ Pontuacao = mongoose.model('Pontuacao');
 //Participante = mongoose.model('Participante');
 
 exports.listar = function(req, res) {
-  Jogo.find({}, function(err, task) {
+  Jogo.find({}, function(err, jogos) {
     if (err)
       res.send(err);
-    res.json(task);
+    res.json(jogos.sort(sortBy('-data')));
   });
 };
 
@@ -64,18 +65,18 @@ exports.inserir = function(req, res) {
 };
 
 exports.consultar = function(req, res) {
-  Jogo.findById(req.params.jogoId, function(err, task) {
+  Jogo.findById(req.params.jogoId, function(err, jogo) {
     if (err)
       res.send(err);
-    res.json(task);
+    res.json(jogo);
   });
 };
 
 exports.alterar = function(req, res) {
-  Jogo.findOneAndUpdate({_id: req.params.jogoId}, req.body, {new: true}, function(err, task) {
+  Jogo.findOneAndUpdate({_id: req.params.jogoId}, req.body, {new: true}, function(err, jogo) {
     if (err)
       res.send(err);
-    res.json(task);
+    res.json(jogo);
   });
 };
 
@@ -111,7 +112,7 @@ exports.excluir = function(req, res) {
 
   Jogo.remove({
     _id: req.params.jogoId
-  }, function(err, task) {
+  }, function(err, jogo) {
     if (err)
       res.send(err);
     res.json({ message: 'Jogo excluído' });

@@ -1,11 +1,20 @@
+var sortBy = require('sort-by');
 var mongoose = require('mongoose'),
 Jogador = mongoose.model('Jogador');
 
 exports.listar = function(req, res) {
-  Jogador.find({}, function(err, task) {
+  Jogador.find({}, function(err, jogadores) {
     if (err)
       res.send(err);
-    res.json(task);
+    res.json(jogadores.sort(sortBy('nome')));
+  });
+};
+
+exports.classificacao = function(req, res) {
+  Jogador.find({}, function(err, jogadores) {
+    if (err)
+      res.send(err);
+    res.json(jogadores.sort(sortBy('-pontos')));
   });
 };
 
