@@ -3,35 +3,41 @@ module.exports = function(app) {
   var pontuacaoController = require('../controllers/pontuacaoController.js');
   var jogadorController = require('../controllers/jogadorController.js');
   var jogoController = require('../controllers/jogoController.js');
+  var usuarioController = require('../controllers/usuarioController.js');
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
-    .post(pontuacaoController.inserir);
+    .post(usuarioController.loginRequerido, pontuacaoController.inserir);
 
   app.route('/pontuacao/:pontuacaoId')
     .get(pontuacaoController.consultar)
-    .put(pontuacaoController.alterar)
-    .delete(pontuacaoController.excluir);
+    .put(usuarioController.loginRequerido, pontuacaoController.alterar)
+    .delete(usuarioController.loginRequerido, pontuacaoController.excluir);
 
   app.route('/jogador')
     .get(jogadorController.listar)
-    .post(jogadorController.inserir);
+    .post(usuarioController.loginRequerido, jogadorController.inserir);
 
   app.route('/classificacao')
     .get(jogadorController.classificacao);
 
   app.route('/jogador/:jogadorId')
     .get(jogadorController.consultar)
-    .put(jogadorController.alterar)
-    .delete(jogadorController.excluir);
+    .put(usuarioController.loginRequerido, jogadorController.alterar)
+    .delete(usuarioController.loginRequerido, jogadorController.excluir);
 
   app.route('/jogo')
     .get(jogoController.listar)
-    .post(jogoController.inserir);
+    .post(usuarioController.loginRequerido, jogoController.inserir);
 
   app.route('/jogo/:jogoId')
     .get(jogoController.consultar)
-    .put(jogoController.alterar)
-    .delete(jogoController.excluir);
+    .put(usuarioController.loginRequerido, jogoController.alterar)
+    .delete(usuarioController.loginRequerido, jogoController.excluir);
 
+  app.route('/auth/cadastrar')
+    .post(usuarioController.loginRequerido, usuarioController.inserir);
+
+  app.route('/auth/login')
+    .post(usuarioController.login);
 };
