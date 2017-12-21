@@ -27,10 +27,10 @@ exports.login = function(req, res) {
   }, function(err, user) {
     if (err) throw err;
     if (!user) {
-      res.status(401).json({ message: 'Falha na autenticação. Usuário não encontrado.' });
+      return res.json({ message: 'Falha na autenticação. Usuário não encontrado.' });
     } else if (user) {
       if (!user.compararSenha(req.body.senha)) {
-        res.status(401).json({ message: 'Falha na autenticação. Senha não confere.' });
+        return res.json({ message: 'Falha na autenticação. Senha não confere.' });
       } else {
         return res.json({token: jwt.sign({ login: user.login, _id: user._id }, 'RESTFULAPIs', { expiresIn: 86400 })});
       }
