@@ -12,7 +12,7 @@ exports.inserir = function(req, res) {
   novoUsuario.senha = bcrypt.hashSync(req.body.senha, salt);
   novoUsuario.save(function(err, user) {
     if (err) {
-      return res.status(400).json({
+      return res.status(440).json({
         message: err
       });
     } else {
@@ -27,7 +27,7 @@ exports.login = function(req, res) {
     login: req.body.login
   }, function(err, user) {
     if (err)
-      return res.status(400).json(err);
+      return res.status(440).json(err);
     if (!user) {
       return res.status(401).json({ message: 'Falha na autenticação. Usuário não encontrado.' });
     } else if (user) {
