@@ -3,7 +3,6 @@
 var mongoose = require('mongoose'),
 Usuario = mongoose.model('Usuario'),
 bcrypt = require('bcrypt-nodejs'),
-Retorno = require('../models/retorno.js'),
 jwt = require('jsonwebtoken');
 
 exports.inserir = function(req, res) {

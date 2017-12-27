@@ -4,6 +4,7 @@ module.exports = function(app) {
   var jogadorController = require('../controllers/jogadorController.js');
   var jogoController = require('../controllers/jogoController.js');
   var usuarioController = require('../controllers/usuarioController.js');
+  var parametroController = require('../controllers/parametroController.js');
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
@@ -40,4 +41,9 @@ module.exports = function(app) {
 
   app.route('/auth/login')
     .post(usuarioController.login);
+
+  app.route('/parametro')
+    .get(parametroController.consultar)
+    .put(usuarioController.loginRequerido, parametroController.alterar);
+
 };

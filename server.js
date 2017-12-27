@@ -7,6 +7,7 @@ var express = require('express'),
   Jogo = require('./api/models/jogo'),
   jsonwebtoken = require("jsonwebtoken"),
   Usuario = require('./api/models/usuario'),
+  Parametro = require('./api/models/parametro'),
   bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;

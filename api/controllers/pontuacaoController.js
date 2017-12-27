@@ -1,6 +1,5 @@
 var sortBy = require('sort-by');
 var mongoose = require('mongoose'),
-Retorno = require('../models/retorno.js'),
 Pontuacao = mongoose.model('Pontuacao');
 
 exports.listar = function(req, res) {
