@@ -11,7 +11,6 @@ exports.consultar = function(req, res) {
 
 exports.alterar = function(req, res) {
   Parametro.findOne({ }, function(err, parametro) {
-    console.log(parametro);
     if (parametro){
       Parametro.findOneAndUpdate({ }, req.body, {new: true}, function(err, parametro) {
         if (err)
@@ -19,7 +18,6 @@ exports.alterar = function(req, res) {
         return res.json(parametro);
       });
     } else {
-      console.log(parametro);
       var novoParametro = new Parametro(req.body);
       novoParametro.save(function(err, parametro) {
         if (err)
