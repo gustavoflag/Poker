@@ -24,7 +24,7 @@ exports.inserir = function(req, res) {
 
   novoJogo.save(function(err, task) {
     if (err)
-      res.send(err);
+      res.status(440).json(err);
     res.json(task);
   });
 
