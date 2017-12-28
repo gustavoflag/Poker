@@ -3,12 +3,18 @@ var mongoose = require('mongoose'),
 Jogo = mongoose.model('Jogo'),
 Jogador = mongoose.model('Jogador'),
 Pontuacao = mongoose.model('Pontuacao');
-//Participante = mongoose.model('Participante');
 
 exports.listar = function(req, res) {
   Jogo.find({}, function(err, jogos) {
     if (err)
       return res.status(440).json(err);
+
+    jogos.forEach(function (jogo){
+      if(jogo.participantes){
+        jogo.participantes = jogo.participantes.sort(sortBy('lugar'));
+      }
+    });
+
     return res.json(jogos.sort(sortBy('-data')));
   });
 };
