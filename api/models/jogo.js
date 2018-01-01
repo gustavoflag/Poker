@@ -14,6 +14,10 @@ var JogoSchema = new Schema({
     type: Date,
     default: Date.now,
     required: 'Data é obrigatório!'
+  },
+  valorMaleta: {
+    type: Number,
+    default: 0
   }
 });
 

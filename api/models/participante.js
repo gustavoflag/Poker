@@ -12,6 +12,18 @@ var ParticipanteSchema = new Schema({
     type: Number,
     required: 'Lugar (posição) do jogador é obrigatório!'
   },
+  pontos: {
+    type: Number,
+    default: 0
+  },
+  valorInvestido:{
+    type: Number,
+    default: 0
+  },
+  valorRecebido:{
+    type: Number,
+    default: 0
+  },
   rebuy: {
     type: Boolean,
     default: false

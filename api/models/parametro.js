@@ -10,6 +10,9 @@ var ParametroSchema = new Schema({
   valorMaleta: {
     type: Number,
     required: 'Valor da Maleta é obrigatório!'
+  },
+  participantesPremiacaoTerceiro: {
+    type: Number
   }
 });
 

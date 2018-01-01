@@ -22,6 +22,9 @@ module.exports = function(app) {
   app.route('/classificacao')
     .get(jogadorController.classificacao);
 
+    app.route('/classificacaoRookies')
+      .get(jogadorController.classificacaoRookies);
+
   app.route('/jogador/:jogadorId')
     .get(jogadorController.consultar)
     .put(usuarioController.loginRequerido, jogadorController.alterar)

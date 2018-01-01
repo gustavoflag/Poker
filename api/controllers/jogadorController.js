@@ -18,6 +18,14 @@ exports.classificacao = function(req, res) {
   });
 };
 
+exports.classificacaoRookies = function(req, res) {
+  Jogador.find({}, function(err, jogadores) {
+    if (err)
+      return res.status(440).json(err);
+    return res.json(jogadores.filter((j) => j.rookie === true).sort(sortBy('-pontos')));
+  });
+};
+
 exports.inserir = function(req, res) {
   var novoJogador = new Jogador(req.body);
   novoJogador.save(function(err, task) {
