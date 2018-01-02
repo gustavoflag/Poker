@@ -31,6 +31,18 @@ var JogadorSchema = new Schema({
   valorRecebido:{
     type: Number,
     default: 0
+  },
+  historicoJogos:{
+    type: [{
+      lugar: {
+        type: Number,
+        required: 'Lugar (posição) é obrigatório!'
+      },
+      quantidade: {
+        type: Number,
+        default:0
+      }
+    }]
   }
 });
 

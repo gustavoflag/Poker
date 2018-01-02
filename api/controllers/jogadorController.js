@@ -14,7 +14,7 @@ exports.classificacao = function(req, res) {
   Jogador.find({}, function(err, jogadores) {
     if (err)
       return res.status(440).json(err);
-    return res.json(jogadores.sort(sortBy('-pontos')));
+    return res.json(jogadores.sort(sortBy('-pontos', 'jogos')));
   });
 };
 
@@ -28,6 +28,14 @@ exports.classificacaoRookies = function(req, res) {
 
 exports.inserir = function(req, res) {
   var novoJogador = new Jogador(req.body);
+
+  novoJogador.historicoJogos = [];
+  novoJogador.historicoJogos.push({ lugar:-1, quantidade:0 });
+
+  for (var i = 1; i <= 15; i++){
+    novoJogador.historicoJogos.push({ lugar:i, quantidade:0 });
+  }
+
   novoJogador.save(function(err, task) {
     if (err)
       return res.status(440).json(err);

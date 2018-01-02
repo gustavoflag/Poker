@@ -90,6 +90,20 @@ exports.inserir = function(req, res) {
             jogadorParticipante.valorInvestido += participante.valorInvestido;
             jogadorParticipante.jogos++;
 
+            var historicoPosicao;
+
+            if (participante.rebuy){
+              historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
+            } else {
+              historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
+            }
+
+            if (!historicoPosicao){
+              jogadorParticipante.historicoJogos.concat({ lugar:participante.lugar, quantidade:1 });
+            } else {
+              historicoPosicao.quantidade++;
+            }
+
             jogadorParticipante.save(function(err, task) {
                 if (err){
                   return res.status(440).json(err);
@@ -107,6 +121,20 @@ exports.inserir = function(req, res) {
               jogadorParticipante.valorRecebido += participante.valorRecebido;
               jogadorParticipante.valorInvestido += participante.valorInvestido;
               jogadorParticipante.jogos++;
+
+              var historicoPosicao;
+
+              if (participante.rebuy){
+                historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
+              } else {
+                historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
+              }
+
+              if (!historicoPosicao){
+                jogadorParticipante.historicoJogos.concat({ lugar:participante.lugar, quantidade:1 });
+              } else {
+                historicoPosicao.quantidade++;
+              }
 
               jogadorParticipante.save(function(err, jog) {
                   if (err)
