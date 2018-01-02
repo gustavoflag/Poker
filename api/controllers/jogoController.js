@@ -196,6 +196,16 @@ exports.excluir = function(req, res) {
             jogadorParticipante.valorRecebido -= participante.valorRecebido;
             jogadorParticipante.jogos--;
 
+            if (participante.rebuy){
+              historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
+            } else {
+              historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
+            }
+
+            if (!historicoPosicao){
+              historicoPosicao.quantidade--;
+            }
+
             jogadorParticipante.save(function(err, task) {
                 if (err)
                   res.status(440).json(err);
