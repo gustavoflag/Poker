@@ -196,6 +196,8 @@ exports.excluir = function(req, res) {
             jogadorParticipante.valorRecebido -= participante.valorRecebido;
             jogadorParticipante.jogos--;
 
+            var historicoPosicao;
+
             if (participante.rebuy){
               historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
             } else {
