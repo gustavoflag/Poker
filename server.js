@@ -8,6 +8,7 @@ var express = require('express'),
   jsonwebtoken = require("jsonwebtoken"),
   Usuario = require('./api/models/usuario'),
   Parametro = require('./api/models/parametro'),
+  LancamentoCaixa = require('./api/models/lancamentoCaixa'),
   bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;

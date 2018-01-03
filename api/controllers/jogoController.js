@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
 Jogo = mongoose.model('Jogo'),
 Jogador = mongoose.model('Jogador'),
 Pontuacao = mongoose.model('Pontuacao'),
-Parametro = mongoose.model('Parametro');
+Parametro = mongoose.model('Parametro'),
+LancamentoCaixa = mongoose.model('LancamentoCaixa');
 
 exports.listar = function(req, res) {
   Jogo.find({}, function(err, jogos) {
@@ -148,6 +149,15 @@ exports.inserir = function(req, res) {
             novoJogo.save(function(err, jogo) {
               if (err)
                 return res.status(440).json(err);
+
+              var strData = (novoJogo.data.getDate() + '/' + (novoJogo.data.getMonth() + 1) + '/' +  novoJogo.data.getFullYear());
+              var lctoCaixa = new LancamentoCaixa({ data: novoJogo.data, valor: novoJogo.valorMaleta, descricao: 'Jogo - data: ' + strData, idJogo: jogo._id });
+
+              lctoCaixa.save(function(err, lcto) {
+                if (err)
+                  return res.status(440).json(err);
+              });
+
               return res.json(jogo);
             });
           }
@@ -217,6 +227,13 @@ exports.excluir = function(req, res) {
       });
     });
 
+    LancamentoCaixa.remove({
+      idJogo: jogo._id
+    }, function(err, jogo) {
+      if (err)
+        return res.status(440).json(err);
+    });
+    
     Jogo.remove({
       _id: jogo._id
     }, function(err, jogo) {
