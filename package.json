@@ -1,6 +1,6 @@
 {
   "name": "poker",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node server.js"
@@ -17,5 +17,8 @@
     "morgan": "~1.9.0",
     "serve-favicon": "~2.4.5",
     "sort-by": "^1.2.0"
+  },
+  "engines": {
+    "node": "9.3.0"
   }
 }
