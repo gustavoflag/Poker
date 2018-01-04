@@ -18,7 +18,7 @@ module.exports = function(app) {
 
   app.route('/jogador')
     .get(jogadorController.listar)
-    .post(jogadorController.inserir);
+    .post(usuarioController.loginRequerido, jogadorController.inserir);
 
   app.route('/classificacao')
     .get(jogadorController.classificacao);
@@ -41,7 +41,7 @@ module.exports = function(app) {
     .delete(usuarioController.loginRequerido, jogoController.excluir);
 
   app.route('/auth/cadastrar')
-    .post(usuarioController.loginRequerido, usuarioController.inserir);
+    .post(usuarioController.inserir);
 
   app.route('/auth/login')
     .post(usuarioController.login);
