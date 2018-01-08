@@ -214,7 +214,7 @@ exports.excluir = function(req, res) {
               historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
             }
 
-            if (!historicoPosicao){
+            if (historicoPosicao){
               historicoPosicao.quantidade--;
             }
 
@@ -233,7 +233,7 @@ exports.excluir = function(req, res) {
       if (err)
         return res.status(440).json(err);
     });
-    
+
     Jogo.remove({
       _id: jogo._id
     }, function(err, jogo) {
