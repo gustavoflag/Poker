@@ -53,10 +53,10 @@ exports.inserir = function(req, res) {
       }
 
       if (novoJogo.participantes.length >= parametro.participantesPremiacaoTerceiro){
-        premiacaoTerceiro = parametro.valorBuyIn;
-        premiacaoSegundo = parametro.valorBuyIn * 2;
+        premiacaoTerceiro = parametro.valorBuyIn + parametro.valorMaleta;
+        premiacaoSegundo = (parametro.valorBuyIn + parametro.valorMaleta) * 2;
       } else {
-        premiacaoSegundo = parametro.valorBuyIn;
+        premiacaoSegundo = parametro.valorBuyIn + parametro.valorMaleta;
       }
 
       premiacaoPrimeiro = premiacaoTotal - premiacaoSegundo - premiacaoTerceiro;
