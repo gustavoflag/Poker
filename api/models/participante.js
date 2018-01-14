@@ -25,8 +25,8 @@ var ParticipanteSchema = new Schema({
     default: 0
   },
   rebuy: {
-    type: Boolean,
-    default: false
+    type: Number,
+    default: 0
   }
 });
 

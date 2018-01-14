@@ -37,7 +37,13 @@ exports.inserir = function(req, res) {
       var premiacaoSegundo = 0;
       var premiacaoTerceiro = 0;
 
-      var qtdeRebuy = novoJogo.participantes.filter((p) => p.rebuy === true).length;
+      //var rebuys = novoJogo.participantes.filter((p) => p.rebuy > 0);
+
+      var qtdeRebuy = 0;
+
+      for (var i = 0; i < novoJogo.participantes.length; i++){
+        qtdeRebuy += novoJogo.participantes[i].rebuy;
+      }
 
       var premiacaoTotal = (novoJogo.participantes.length * parametro.valorBuyIn)
                             + (qtdeRebuy * parametro.valorBuyIn);
@@ -69,7 +75,7 @@ exports.inserir = function(req, res) {
             participante.pontos = pontuacao.pontos;
           }
         } else {
-          participante.valorInvestido += parametro.valorBuyIn;
+          participante.valorInvestido += (parametro.valorBuyIn * participante.rebuy);
         }
 
         if (participante.lugar === 1){
@@ -93,7 +99,7 @@ exports.inserir = function(req, res) {
 
             var historicoPosicao;
 
-            if (participante.rebuy){
+            if (participante.rebuy > 0){
               historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
             } else {
               historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
@@ -208,7 +214,7 @@ exports.excluir = function(req, res) {
 
             var historicoPosicao;
 
-            if (participante.rebuy){
+            if (participante.rebuy > 0){
               historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
             } else {
               historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
