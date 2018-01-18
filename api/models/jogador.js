@@ -43,6 +43,13 @@ var JogadorSchema = new Schema({
         default:0
       }
     }]
+  },
+  titulos:{
+    type: [{
+      ano: {
+        type: Number
+      }
+    }]
   }
 });
 
