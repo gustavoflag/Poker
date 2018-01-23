@@ -24,8 +24,7 @@ exports.classificacao = function(req, res) {
                                          ,'-historicoJogos[7].quantidade'
                                          ,'-historicoJogos[8].quantidade'
                                          ,'-historicoJogos[9].quantidade'
-                                         ,'-historicoJogos[10].quantidade'
-                                         ,'jogos')));
+                                         ,'-historicoJogos[10].quantidade')));
   });
 };
 
@@ -43,8 +42,7 @@ exports.classificacaoRookies = function(req, res) {
                                                                           ,'-historicoJogos[7].quantidade'
                                                                           ,'-historicoJogos[8].quantidade'
                                                                           ,'-historicoJogos[9].quantidade'
-                                                                          ,'-historicoJogos[10].quantidade'
-                                                                          ,'jogos')));
+                                                                          ,'-historicoJogos[10].quantidade')));
   });
 };
 
