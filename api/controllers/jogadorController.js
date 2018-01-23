@@ -14,7 +14,18 @@ exports.classificacao = function(req, res) {
   Jogador.find({}, function(err, jogadores) {
     if (err)
       return res.status(440).json(err);
-    return res.json(jogadores.sort(sortBy('-pontos', 'jogos')));
+    return res.json(jogadores.sort(sortBy('-pontos'
+                                         ,'historicoJogos[1].quantidade'
+                                         ,'historicoJogos[2].quantidade'
+                                         ,'historicoJogos[3].quantidade'
+                                         ,'historicoJogos[4].quantidade'
+                                         ,'historicoJogos[5].quantidade'
+                                         ,'historicoJogos[6].quantidade'
+                                         ,'historicoJogos[7].quantidade'
+                                         ,'historicoJogos[8].quantidade'
+                                         ,'historicoJogos[9].quantidade'
+                                         ,'historicoJogos[10].quantidade'
+                                         ,'quantidade')));
   });
 };
 
@@ -22,7 +33,18 @@ exports.classificacaoRookies = function(req, res) {
   Jogador.find({}, function(err, jogadores) {
     if (err)
       return res.status(440).json(err);
-    return res.json(jogadores.filter((j) => j.rookie === true).sort(sortBy('-pontos')));
+    return res.json(jogadores.filter((j) => j.rookie === true).sort(sortBy('-pontos'
+                                                                          ,'historicoJogos[1].quantidade'
+                                                                          ,'historicoJogos[2].quantidade'
+                                                                          ,'historicoJogos[3].quantidade'
+                                                                          ,'historicoJogos[4].quantidade'
+                                                                          ,'historicoJogos[5].quantidade'
+                                                                          ,'historicoJogos[6].quantidade'
+                                                                          ,'historicoJogos[7].quantidade'
+                                                                          ,'historicoJogos[8].quantidade'
+                                                                          ,'historicoJogos[9].quantidade'
+                                                                          ,'historicoJogos[10].quantidade'
+                                                                          ,'quantidade')));
   });
 };
 
