@@ -15,6 +15,7 @@ exports.classificacao = function(req, res) {
     if (err)
       return res.status(440).json(err);
     return res.json(jogadores.sort(sortBy('-pontos'
+<<<<<<< HEAD
                                          ,'-historicoJogos[1].quantidade'
                                          ,'-historicoJogos[2].quantidade'
                                          ,'-historicoJogos[3].quantidade'
@@ -26,6 +27,19 @@ exports.classificacao = function(req, res) {
                                          ,'-historicoJogos[9].quantidade'
                                          ,'-historicoJogos[10].quantidade'
                                          ,'jogos')));
+=======
+                                         ,'historicoJogos[1].quantidade'
+                                         ,'historicoJogos[2].quantidade'
+                                         ,'historicoJogos[3].quantidade'
+                                         ,'historicoJogos[4].quantidade'
+                                         ,'historicoJogos[5].quantidade'
+                                         ,'historicoJogos[6].quantidade'
+                                         ,'historicoJogos[7].quantidade'
+                                         ,'historicoJogos[8].quantidade'
+                                         ,'historicoJogos[9].quantidade'
+                                         ,'historicoJogos[10].quantidade'
+                                         ,'quantidade')));
+>>>>>>> 2c22bccdaacac092a5555d7c6241d05e3fc73bb4
   });
 };
 
@@ -34,6 +48,7 @@ exports.classificacaoRookies = function(req, res) {
     if (err)
       return res.status(440).json(err);
     return res.json(jogadores.filter((j) => j.rookie === true).sort(sortBy('-pontos'
+<<<<<<< HEAD
                                                                           ,'-historicoJogos[1].quantidade'
                                                                           ,'-historicoJogos[2].quantidade'
                                                                           ,'-historicoJogos[3].quantidade'
@@ -45,6 +60,19 @@ exports.classificacaoRookies = function(req, res) {
                                                                           ,'-historicoJogos[9].quantidade'
                                                                           ,'-historicoJogos[10].quantidade'
                                                                           ,'jogos')));
+=======
+                                                                          ,'historicoJogos[1].quantidade'
+                                                                          ,'historicoJogos[2].quantidade'
+                                                                          ,'historicoJogos[3].quantidade'
+                                                                          ,'historicoJogos[4].quantidade'
+                                                                          ,'historicoJogos[5].quantidade'
+                                                                          ,'historicoJogos[6].quantidade'
+                                                                          ,'historicoJogos[7].quantidade'
+                                                                          ,'historicoJogos[8].quantidade'
+                                                                          ,'historicoJogos[9].quantidade'
+                                                                          ,'historicoJogos[10].quantidade'
+                                                                          ,'quantidade')));
+>>>>>>> 2c22bccdaacac092a5555d7c6241d05e3fc73bb4
   });
 };
 
