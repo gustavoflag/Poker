@@ -14,17 +14,7 @@ exports.classificacao = function(req, res) {
   Jogador.find({}, function(err, jogadores) {
     if (err)
       return res.status(440).json(err);
-    return res.json(jogadores.sort(sortBy('-pontos'
-                                         ,'-historicoJogos[1].quantidade'
-                                         ,'-historicoJogos[2].quantidade'
-                                         ,'-historicoJogos[3].quantidade'
-                                         ,'-historicoJogos[4].quantidade'
-                                         ,'-historicoJogos[5].quantidade'
-                                         ,'-historicoJogos[6].quantidade'
-                                         ,'-historicoJogos[7].quantidade'
-                                         ,'-historicoJogos[8].quantidade'
-                                         ,'-historicoJogos[9].quantidade'
-                                         ,'-historicoJogos[10].quantidade')));
+    return res.json(jogadores.sort(compararJogadores));
   });
 };
 
@@ -32,19 +22,34 @@ exports.classificacaoRookies = function(req, res) {
   Jogador.find({}, function(err, jogadores) {
     if (err)
       return res.status(440).json(err);
-    return res.json(jogadores.filter((j) => j.rookie === true).sort(sortBy('-pontos'
-                                                                          ,'-historicoJogos[1].quantidade'
-                                                                          ,'-historicoJogos[2].quantidade'
-                                                                          ,'-historicoJogos[3].quantidade'
-                                                                          ,'-historicoJogos[4].quantidade'
-                                                                          ,'-historicoJogos[5].quantidade'
-                                                                          ,'-historicoJogos[6].quantidade'
-                                                                          ,'-historicoJogos[7].quantidade'
-                                                                          ,'-historicoJogos[8].quantidade'
-                                                                          ,'-historicoJogos[9].quantidade'
-                                                                          ,'-historicoJogos[10].quantidade')));
+    return res.json(jogadores.filter((j) => j.rookie === true).sort(compararJogadores));
   });
 };
+
+function compararJogadores(a, b){
+  var diffPontos = (a.pontos - b.pontos);
+  if (diffPontos != 0){
+    return diffPontos * -1;
+  }
+
+  for (var i = 1; i <= 15; i++){
+    var diffPos = (a.historicoJogos[i].quantidade - b.historicoJogos[i].quantidade);
+
+    if (diffPos != 0){
+      return diffPos * -1;
+    }
+  }
+
+  var diffValor = (a.valorRecebido - b.valorRecebido);
+  if (diffValor != 0){
+    return diffValor * -1;
+  }
+
+  var diffJogos = (a.jogos - b.jogos);
+  if (diffJogos != 0){
+    return diffJogos;
+  }
+}
 
 exports.inserir = function(req, res) {
   var novoJogador = new Jogador(req.body);
