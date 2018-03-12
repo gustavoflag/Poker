@@ -27,13 +27,13 @@ exports.classificacaoRookies = function(req, res) {
   });
 };
 
-/*exports.classificacaoMes = function(req, res){
+exports.classificacaoMes = function(req, res){
   var dateNow = new Date();
   var jogadores = [];
 
-  Jogo.find({ data: {"$gte": new Date(dateNow.getYear(), dateNow.getMonth() - 1, 1), "$lt": new Date(dateNow.getYear(), dateNow.getMonth(), 1) }}, function(err, jogos) {*/
+  Jogo.find({ data: {"$gte": new Date(dateNow.getYear(), dateNow.getMonth() - 1, 1), "$lt": new Date(dateNow.getYear(), dateNow.getMonth(), 1) }}, function(err, jogos) {
   //Jogo.find({ data: {"$gte": new Date(2018, 0, 1), "$lt": new Date(2018, 1, 1) }}, function(err, jogos) {
-  /*  if (err)
+    if (err)
       return res.status(440).json(err);
 
     jogos.forEach(function (jogo){
@@ -68,7 +68,7 @@ function compararPontos(a, b){
   if (diffPontos != 0){
     return diffPontos * -1;
   }
-}*/
+}
 
 function compararJogadores(a, b){
   var diffPontos = (a.pontos - b.pontos);
