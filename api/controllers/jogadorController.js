@@ -1,6 +1,7 @@
 var sortBy = require('sort-by');
 var mongoose = require('mongoose'),
-Jogador = mongoose.model('Jogador');
+Jogador = mongoose.model('Jogador'),
+Jogo = mongoose.model('Jogo');
 
 exports.listar = function(req, res) {
   Jogador.find({}, function(err, jogadores) {
@@ -25,6 +26,49 @@ exports.classificacaoRookies = function(req, res) {
     return res.json(jogadores.filter((j) => j.rookie === true).sort(compararJogadores));
   });
 };
+
+exports.classificacaoMes = function(req, res){
+  var dateNow = new Date();
+  var jogadores = [];
+
+  Jogo.find({ data: {"$gte": new Date(dateNow.getYear(), dateNow.getMonth() - 1, 1), "$lt": new Date(dateNow.getYear(), dateNow.getMonth(), 1) }}, function(err, jogos) {*/
+  //Jogo.find({ data: {"$gte": new Date(2018, 0, 1), "$lt": new Date(2018, 1, 1) }}, function(err, jogos) {
+    if (err)
+      return res.status(440).json(err);
+
+    jogos.forEach(function (jogo){
+      jogo.participantes.forEach(function (participante){
+
+        var jogador = null;
+        for (var i = 0; i < jogadores.length; i++){
+          if (jogadores[i].nomeJogador === participante.nomeJogador){
+            jogador = jogadores[i];
+            break;
+          }
+        }
+        if (!jogador){
+          var novoJogador = {
+            nomeJogador: participante.nomeJogador,
+            pontos: participante.pontos
+          };
+
+          jogadores.push(novoJogador);
+        } else {
+          jogador.pontos += participante.pontos;
+        }
+      });
+    });
+
+    return res.json(jogadores.sort(compararPontos));
+  });
+};
+
+function compararPontos(a, b){
+  var diffPontos = (a.pontos - b.pontos);
+  if (diffPontos != 0){
+    return diffPontos * -1;
+  }
+}
 
 function compararJogadores(a, b){
   var diffPontos = (a.pontos - b.pontos);
