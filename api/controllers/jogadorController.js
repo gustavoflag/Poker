@@ -28,11 +28,9 @@ exports.classificacaoRookies = function(req, res) {
 };
 
 exports.classificacaoMes = function(req, res){
-  var dateNow = new Date();
   var jogadores = [];
 
-  Jogo.find({ data: {"$gte": new Date(dateNow.getYear(), dateNow.getMonth() - 1, 1), "$lt": new Date(dateNow.getYear(), dateNow.getMonth(), 1) }}, function(err, jogos) {
-  //Jogo.find({ data: {"$gte": new Date(2018, 0, 1), "$lt": new Date(2018, 1, 1) }}, function(err, jogos) {
+  Jogo.find({ data: {"$gte": new Date(req.params.ano, req.params.mes - 1, 1), "$lt": new Date(req.params.ano, req.params.mes, 1) }}, function(err, jogos) {
     if (err)
       return res.status(440).json(err);
 

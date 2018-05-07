@@ -23,7 +23,7 @@ module.exports = function(app) {
   app.route('/classificacao')
     .get(jogadorController.classificacao);
 
- app.route('/classificacaoMes')
+ app.route('/classificacaoMes/:ano/:mes')
       .get(jogadorController.classificacaoMes);
 
   app.route('/classificacaoRookies')
