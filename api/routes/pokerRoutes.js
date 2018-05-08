@@ -20,6 +20,11 @@ module.exports = function(app) {
     .get(jogadorController.listar)
     .post(usuarioController.loginRequerido, jogadorController.inserir);
 
+  app.route('/jogador/:jogadorId')
+    .get(jogadorController.consultar)
+    .put(usuarioController.loginRequerido, jogadorController.alterar)
+    .delete(usuarioController.loginRequerido, jogadorController.excluir);
+
   app.route('/classificacao')
     .get(jogadorController.classificacao);
 
@@ -31,11 +36,6 @@ module.exports = function(app) {
 
   app.route('/classificacaoRookies')
     .get(jogadorController.classificacaoRookies);
-
-  app.route('/jogador/:jogadorId')
-    .get(jogadorController.consultar)
-    .put(usuarioController.loginRequerido, jogadorController.alterar)
-    .delete(usuarioController.loginRequerido, jogadorController.excluir);
 
   app.route('/jogo')
     .get(jogoController.listar)

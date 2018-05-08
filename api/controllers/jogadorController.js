@@ -211,10 +211,25 @@ exports.inserir = function(req, res) {
 };
 
 exports.consultar = function(req, res) {
-  Jogador.findById(req.params.jogadorId, function(err, task) {
+  Jogador.findById(req.params.jogadorId, function(err, jogador) {
     if (err)
       return res.status(440).json(err);
-    return res.json(task);
+
+    Jogo.find({ participantes: {$elemMatch: { nomeJogador: jogador.nome, lugar: 1 }}}, function(err, jogos){
+      if (err)
+        return res.status(440).json(err);
+
+      jogos.forEach((jogo) => {
+        var resumoJogo = {
+          _id: jogo._id,
+          data: jogo.data
+        };
+
+        jogador.vitorias.push(resumoJogo);
+      });
+
+      return res.json(jogador);
+    });
   });
 };
 

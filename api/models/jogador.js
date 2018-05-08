@@ -50,6 +50,9 @@ var JogadorSchema = new Schema({
         type: Number
       }
     }]
+  },
+  vitorias:{
+    type: []
   }
 });
 
