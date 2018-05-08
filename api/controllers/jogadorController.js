@@ -76,11 +76,22 @@ function classMes(ano, mes, callback){
         if (!jogador){
           var novoJogador = {
             nomeJogador: participante.nomeJogador,
-            pontos: participante.pontos
+            pontos: participante.pontos,
+            vitorias: participante.lugar === 1 ? 1 : 0,
+            HUs: participante.lugar <= 2 ? 1 : 0
           };
 
           jogadores.push(novoJogador);
         } else {
+
+          if (participante.lugar === 1){
+            jogador.vitorias++;
+          }
+
+          if (participante.lugar <= 2){
+            jogador.HUs++;
+          }
+
           jogador.pontos += participante.pontos;
         }
       });
