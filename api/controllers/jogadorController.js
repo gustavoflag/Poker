@@ -57,9 +57,61 @@ exports.classificacaoMes = function(req, res){
       });
     });
 
-    return res.json(jogadores.sort(compararPontos));
+    nomeMes(req.params.mes, function (nome) {
+      var retorno = {
+        mes: req.params.mes,
+        nomeMes: nome,
+        classificacao: jogadores.sort(compararPontos)
+      };
+
+      return res.json(retorno);
+    });
   });
 };
+
+function nomeMes(indice, callback){
+    var nomeMesI;
+
+    if (Number(indice) == 1)
+    {
+      nomeMesI = 'Janeiro';
+    } else if (Number(indice) == 2)
+    {
+      nomeMesI = 'Fevereiro';
+    } else if (Number(indice) == 3)
+    {
+      nomeMesI = 'Março';
+    } else if (Number(indice) == 4)
+    {
+      nomeMesI = 'Abril';
+    } else if (Number(indice) == 5)
+    {
+      nomeMesI = 'Maio';
+    } else if (Number(indice) == 6)
+    {
+      nomeMesI = 'Junho';
+    } else if (Number(indice) == 7)
+    {
+      nomeMesI = 'Julho';
+    } else if (Number(indice) == 8)
+    {
+      nomeMesI = 'Agosto';
+    } else if (Number(indice) == 9)
+    {
+      nomeMesI = 'Setembro';
+    } else if (Number(indice) == 10)
+    {
+      nomeMesI = 'Outubro';
+    } else if (Number(indice) == 11)
+    {
+      nomeMesI = 'Novembro';
+    } else if (Number(indice) == 12)
+    {
+      nomeMesI = 'Dezembro';
+    }
+
+    return callback(nomeMesI);
+}
 
 function compararPontos(a, b){
   var diffPontos = (a.pontos - b.pontos);
