@@ -28,11 +28,40 @@ exports.classificacaoRookies = function(req, res) {
 };
 
 exports.classificacaoMes = function(req, res){
-  var jogadores = [];
-
-  Jogo.find({ data: {"$gte": new Date(req.params.ano, req.params.mes - 1, 1), "$lt": new Date(req.params.ano, req.params.mes, 1) }}, function(err, jogos) {
+  classMes(req.params.ano, req.params.mes, function (err, mes){
     if (err)
       return res.status(440).json(err);
+
+    return res.json(mes);
+  });
+};
+
+exports.classificacaoTodosMeses = function(req, res){
+  var dataAtual = new Date();
+  var ano = dataAtual.getFullYear();
+  var mesAno = dataAtual.getMonth() + 1;
+  var meses = [];
+
+  for (var i = mesAno; i > 0; i--){
+    classMes(ano, i, function (err, mes){
+      if (err)
+        return res.status(440).json(err);
+
+      meses.push(mes);
+
+      if (meses.length == mesAno){
+        return res.json(meses.sort(compararMeses));
+      }
+    });
+  }
+};
+
+function classMes(ano, mes, callback){
+  var jogadores = [];
+
+  Jogo.find({ data: {"$gte": new Date(ano, mes - 1, 1), "$lt": new Date(ano, mes, 1) }}, function(err, jogos) {
+    if (err)
+      callback(err, null);
 
     jogos.forEach(function (jogo){
       jogo.participantes.forEach(function (participante){
@@ -57,14 +86,15 @@ exports.classificacaoMes = function(req, res){
       });
     });
 
-    nomeMes(req.params.mes, function (nome) {
+    nomeMes(mes, function (nome) {
       var retorno = {
-        mes: req.params.mes,
+        ano: ano,
+        mes: mes,
         nomeMes: nome,
         classificacao: jogadores.sort(compararPontos)
       };
 
-      return res.json(retorno);
+      callback(null, retorno);
     });
   });
 };
@@ -117,6 +147,13 @@ function compararPontos(a, b){
   var diffPontos = (a.pontos - b.pontos);
   if (diffPontos != 0){
     return diffPontos * -1;
+  }
+}
+
+function compararMeses(a, b){
+  var diffMeses = (a.mes - b.mes);
+  if (diffMeses != 0){
+    return diffMeses * -1;
   }
 }
 
