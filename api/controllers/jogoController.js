@@ -21,6 +21,15 @@ exports.listar = function(req, res) {
   });
 };
 
+exports.quantidade = function(req, res){
+  Jogo.find({}, function(err, jogos) {
+    if (err)
+      return res.status(440).json(err);
+
+    return res.json(jogos.length);
+  });
+};
+
 exports.inserir = function(req, res) {
   var novoJogo = new Jogo(req.body);
 
