@@ -51,16 +51,37 @@ var JogadorSchema = new Schema({
       }
     }]
   },
+  pontosPorJogo:{
+    type: Number
+  },
+  mediaPosicao:{
+    type: Number
+  },
   vitorias:{
     type: []
+  },
+  qtdHUs:{
+    type: Number
+  },
+  qtdPontuacoes:{
+    type: Number
   },
   posicaoRanking:{
     type: Number
   },
-  HUs:{
+  posicaoVitorias:{
     type: Number
   },
-  qtdPontuacoes:{
+  posicaoHU:{
+    type: Number
+  },
+  posicaoPontuacoes:{
+    type: Number
+  },
+  posicaoPontosPorJogo:{
+    type: Number
+  },
+  posicaoMediaPosicao:{
     type: Number
   }
 });
