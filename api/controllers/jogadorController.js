@@ -11,11 +11,19 @@ exports.listar = function(req, res) {
   });
 };
 
-exports.classificacao = function(req, res) {
+function classificacaoGeral(callback){
   Jogador.find({}, function(err, jogadores) {
     if (err)
+      callback(err, null);
+    callback(null, jogadores.sort(compararJogadores));
+  });
+};
+
+exports.classificacao = function(req, res) {
+  classificacaoGeral(function(err, jogadores){
+    if (err)
       return res.status(440).json(err);
-    return res.json(jogadores.sort(compararJogadores));
+    return res.json(jogadores);
   });
 };
 
@@ -215,20 +223,41 @@ exports.consultar = function(req, res) {
     if (err)
       return res.status(440).json(err);
 
-    Jogo.find({ participantes: {$elemMatch: { nomeJogador: jogador.nome, lugar: 1 }}}, function(err, jogos){
+    classificacaoGeral(function(err, jogadores){
       if (err)
         return res.status(440).json(err);
 
-      jogos.forEach((jogo) => {
-        var resumoJogo = {
-          _id: jogo._id,
-          data: jogo.data
-        };
+      jogador.posicaoRanking = (jogadores.findIndex(j => j.nome == jogador.nome) + 1);
 
-        jogador.vitorias.push(resumoJogo);
+      jogador.HUs = 0;
+      jogador.HUs += jogador.historicoJogos.find(function(element, index, array) { return element.lugar == 1 }).quantidade;
+      jogador.HUs += jogador.historicoJogos.find(function(element, index, array) { return element.lugar == 2 }).quantidade;
+
+      var pontuacoes = jogador.historicoJogos.filter(function(h){
+        return h.lugar <= 6 && h.lugar > 0;
       });
 
-      return res.json(jogador);
+      jogador.qtdPontuacoes = 0;
+
+      pontuacoes.forEach((pontuacao) => {
+        jogador.qtdPontuacoes += pontuacao.quantidade
+      });
+
+      Jogo.find({ participantes: {$elemMatch: { nomeJogador: jogador.nome, lugar: 1 }}}, function(err, jogos){
+        if (err)
+          return res.status(440).json(err);
+
+        jogos.forEach((jogo) => {
+          var resumoJogo = {
+            _id: jogo._id,
+            data: jogo.data
+          };
+
+          jogador.vitorias.push(resumoJogo);
+        });
+
+        return res.json(jogador);
+      });
     });
   });
 };

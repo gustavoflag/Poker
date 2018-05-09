@@ -53,6 +53,15 @@ var JogadorSchema = new Schema({
   },
   vitorias:{
     type: []
+  },
+  posicaoRanking:{
+    type: Number
+  },
+  HUs:{
+    type: Number
+  },
+  qtdPontuacoes:{
+    type: Number
   }
 });
 
