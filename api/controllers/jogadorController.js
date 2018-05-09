@@ -175,7 +175,7 @@ function compararPontos(a, b){
 function compararVitorias(a, b){
   var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
   if (diffVitorias != 0){
-    return diffVitorias * -1;
+    return diffVitorias * -1; 
   }
 }
 
