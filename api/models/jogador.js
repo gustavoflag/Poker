@@ -68,7 +68,7 @@ var JogadorSchema = new Schema({
   },
   qtdPontuacoes:{
     type: Number
-  },
+  }, 
   posicaoHU:{
     type: Number
   },
