@@ -172,6 +172,7 @@ function compararPontos(a, b){
   }
 }
 
+<<<<<<< HEAD
 function compararVitorias(a, b){
   var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
   if (diffVitorias != 0){
@@ -179,6 +180,8 @@ function compararVitorias(a, b){
   }
 }
 
+=======
+>>>>>>> 575c0500752f9e950048b8665723e469c5fc1025
 function compararHUs(a, b){
   var diffHUs = (a.qtdHUs - b.qtdHUs);
   if (diffHUs != 0){
@@ -262,7 +265,10 @@ function getEstatisticasJogador(jogador){
   jogador.qtdHUs = 0;
   jogador.qtdPontuacoes = 0;
   jogador.mediaPosicao = 0;
+<<<<<<< HEAD
   jogador.qtdVitorias = 0;
+=======
+>>>>>>> 575c0500752f9e950048b8665723e469c5fc1025
 
   jogador.historicoJogos.forEach((historico) => {
     if (historico.lugar <= 6 && historico.lugar > 0){
@@ -271,9 +277,12 @@ function getEstatisticasJogador(jogador){
     if (historico.lugar <= 2 && historico.lugar > 0){
       jogador.qtdHUs += historico.quantidade;
     }
+<<<<<<< HEAD
     if (historico.lugar == 1){
       jogador.qtdVitorias += historico.quantidade;
     }
+=======
+>>>>>>> 575c0500752f9e950048b8665723e469c5fc1025
     if (historico.lugar > 0){
       jogador.mediaPosicao += (historico.lugar * historico.quantidade);
     }
@@ -299,7 +308,10 @@ exports.consultar = function(req, res) {
 
       //posicões relativas ao ranking
       jogador.posicaoRanking = encontraPosicao(jogadores, jogador.nome);
+<<<<<<< HEAD
       jogador.posicaoVitorias = encontraPosicao(jogadores.sort(compararVitorias), jogador.nome);
+=======
+>>>>>>> 575c0500752f9e950048b8665723e469c5fc1025
       jogador.posicaoHU = encontraPosicao(jogadores.sort(compararHUs), jogador.nome);
       jogador.posicaoPontuacoes = encontraPosicao(jogadores.sort(compararPontuacoes), jogador.nome);
       jogador.posicaoPontosPorJogo = encontraPosicao(jogadores.sort(compararPontosPorJogo), jogador.nome);
