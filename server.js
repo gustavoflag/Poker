@@ -12,8 +12,8 @@ var express = require('express'),
   bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/poker');
-//mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_b595dzsg:8qcrfj4oqhv4q8pkjs4iiv7nfm@ds141657.mlab.com:41657/heroku_b595dzsg');
+//mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/poker');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_b595dzsg:8qcrfj4oqhv4q8pkjs4iiv7nfm@ds141657.mlab.com:41657/heroku_b595dzsg');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
