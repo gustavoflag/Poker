@@ -198,6 +198,16 @@ function compararVitorias(a, b){
   if (diffVitorias != 0){
     return diffVitorias * -1;
   }
+
+  var diffPontos = (a.pontos - b.pontos);
+  if (diffPontos != 0){
+    return diffPontos * -1;
+  }
+
+  var diffJogos = (a.jogos - b.jogos);
+  if (diffJogos != 0){
+    return diffJogos;
+  }
 }
 
 function compararHUs(a, b){
@@ -211,6 +221,21 @@ function compararPontosPorJogo(a, b){
   var diffPontosPorJogo = (a.pontosPorJogo - b.pontosPorJogo);
   if (diffPontosPorJogo != 0){
     return diffPontosPorJogo * -1;
+  }
+
+  var diffPontos = (a.pontos - b.pontos);
+  if (diffPontos != 0){
+    return diffPontos * -1;
+  }
+
+  var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
+  if (diffVitorias != 0){
+    return diffVitorias * -1;
+  }
+
+  var diffJogos = (a.jogos - b.jogos);
+  if (diffJogos != 0){
+    return diffJogos;
   }
 }
 
