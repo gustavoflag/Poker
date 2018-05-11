@@ -11,19 +11,35 @@ exports.listar = function(req, res) {
   });
 };
 
-function classificacaoGeral(callback){
+function classificacaoGeral(ordem, callback){
   Jogador.find({}, function(err, jogadores) {
     if (err)
       callback(err, null);
 
     jogadores.forEach(jogador => getEstatisticasJogador(jogador));
 
-    callback(null, jogadores.sort(compararJogadores));
+    switch(ordem){
+      case "P":
+        callback(null, jogadores.sort(compararJogadores));
+        break;
+      case "V":
+        callback(null, jogadores.sort(compararVitorias));
+        break;
+      case "PPJ":
+        callback(null, jogadores.sort(compararPontosPorJogo));
+        break;
+    }
+
   });
 };
 
 exports.classificacao = function(req, res) {
-  classificacaoGeral(function(err, jogadores){
+  var ordem = req.params.ordem;
+
+  if (!ordem)
+    ordem = "P";
+
+  classificacaoGeral(ordem, function(err, jogadores){
     if (err)
       return res.status(440).json(err);
     return res.json(jogadores);
@@ -31,10 +47,15 @@ exports.classificacao = function(req, res) {
 };
 
 exports.classificacaoRookies = function(req, res) {
-  Jogador.find({}, function(err, jogadores) {
+  var ordem = req.params.ordem;
+
+  if (!ordem)
+    ordem = "P";
+
+  classificacaoGeral(ordem, function(err, jogadores){
     if (err)
       return res.status(440).json(err);
-    return res.json(jogadores.filter((j) => j.rookie === true).sort(compararJogadores));
+    return res.json(jogadores.filter((j) => j.rookie === true));
   });
 };
 
@@ -175,7 +196,7 @@ function compararPontos(a, b){
 function compararVitorias(a, b){
   var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
   if (diffVitorias != 0){
-    return diffVitorias * -1; 
+    return diffVitorias * -1;
   }
 }
 
@@ -291,7 +312,7 @@ exports.consultar = function(req, res) {
     if (err)
       return res.status(440).json(err);
 
-    classificacaoGeral(function(err, jogadores){
+    classificacaoGeral("P", function(err, jogadores){
       if (err)
         return res.status(440).json(err);
 
