@@ -1,6 +1,7 @@
 'use strict';
 module.exports = function(app) {
   var pontuacaoController = require('../controllers/pontuacaoController.js');
+  var premiacaoController = require('../controllers/premiacaoController.js');
   var jogadorController = require('../controllers/jogadorController.js');
   var jogoController = require('../controllers/jogoController.js');
   var usuarioController = require('../controllers/usuarioController.js');
@@ -15,6 +16,15 @@ module.exports = function(app) {
     .get(pontuacaoController.consultar)
     .put(usuarioController.loginRequerido, pontuacaoController.alterar)
     .delete(usuarioController.loginRequerido, pontuacaoController.excluir);
+
+  app.route('/premiacao')
+    .get(premiacaoController.listar)
+    .post(usuarioController.loginRequerido, premiacaoController.inserir);
+
+  app.route('/premiacao/:premiacaoId')
+    .get(pontuacaoController.consultar)
+    .put(usuarioController.loginRequerido, premiacaoController.alterar)
+    .delete(usuarioController.loginRequerido, premiacaoController.excluir);
 
   app.route('/jogador')
     .get(jogadorController.listar)
