@@ -187,7 +187,7 @@ function classMes(ano, mes, callback){
         ano: ano,
         mes: mes,
         nomeMes: nome,
-        classificacao: jogadores.sort(compararPontos)
+        classificacao: jogadores.sort(jogadorOrders.compararPontos)
       };
 
       callback(null, retorno);
@@ -248,6 +248,13 @@ function getEstatisticasJogador(jogador){
 
   jogador.mediaPosicao = jogador.mediaPosicao / jogador.jogos;
 };
+
+function compararMeses(a, b){
+  var diffMeses = (a.mes - b.mes);
+  if (diffMeses != 0){
+    return diffMeses * -1;
+  }
+}
 
 function encontraPosicao(jogadores, nomeJogador){
   return (jogadores.findIndex(j => j.nome == nomeJogador) + 1);

@@ -2,7 +2,7 @@
 exports.compararPontos = function(a, b){
   var diffPontos = (a.pontos - b.pontos);
   if (diffPontos != 0){
-    return diffPontos * -1; 
+    return diffPontos * -1;
   }
 }
 
@@ -108,13 +108,6 @@ exports.compararPontuacoes = function(a, b){
   var diffPontuacoes = (a.qtdPontuacoes - b.qtdPontuacoes);
   if (diffPontuacoes != 0){
     return diffPontuacoes * -1;
-  }
-}
-
-exports.compararMeses = function(a, b){
-  var diffMeses = (a.mes - b.mes);
-  if (diffMeses != 0){
-    return diffMeses * -1;
   }
 }
 
