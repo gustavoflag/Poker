@@ -187,7 +187,7 @@ function classMes(ano, mes, callback){
         ano: ano,
         mes: mes,
         nomeMes: nome,
-        classificacao: jogadores.sort(compararPontos)
+        classificacao: jogadores.sort(jogadorOrders.compararPontos)
       };
 
       callback(null, retorno);
