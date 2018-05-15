@@ -2,7 +2,7 @@
 exports.compararPontos = function(a, b){
   var diffPontos = (a.pontos - b.pontos);
   if (diffPontos != 0){
-    return diffPontos * -1;
+    return diffPontos * -1; 
   }
 }
 
