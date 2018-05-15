@@ -224,9 +224,9 @@ function compararHUs(a, b){
 }
 
 function compararSaldo(a, b){
-  var diffSaldo = ((a.valorInvestido - a.valorRecebido) - (b.valorInvestido - b.valorRecebido));
+  var diffSaldo = ((a.valorRecebido - a.valorInvestido) - (b.valorRecebido - b.valorInvestido));
   if (diffSaldo != 0){
-    return diffSaldo;
+    return diffSaldo * -1;
   }
 
   var diffPontos = (a.pontos - b.pontos);
