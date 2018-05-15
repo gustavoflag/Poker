@@ -28,6 +28,12 @@ function classificacaoGeral(ordem, callback){
       case "PPJ":
         callback(null, jogadores.sort(compararPontosPorJogo));
         break;
+      case "VR":
+        callback(null, jogadores.sort(compararValorRecebido));
+        break;
+      case "S":
+        callback(null, jogadores.sort(compararSaldo));
+        break;
     }
 
   });
@@ -216,6 +222,51 @@ function compararHUs(a, b){
     return diffHUs * -1;
   }
 }
+
+function compararSaldo(a, b){
+  var diffSaldo = ((a.valorInvestido - a.valorRecebido) - (b.valorInvestido - b.valorRecebido));
+  if (diffSaldo != 0){
+    return diffSaldo;
+  }
+
+  var diffPontos = (a.pontos - b.pontos);
+  if (diffPontos != 0){
+    return diffPontos * -1;
+  }
+
+  var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
+  if (diffVitorias != 0){
+    return diffVitorias * -1;
+  }
+
+  var diffJogos = (a.jogos - b.jogos);
+  if (diffJogos != 0){
+    return diffJogos;
+  }
+}
+
+function compararValorRecebido(a, b){
+  var diffValorRecebido = (a.valorRecebido - b.valorRecebido);
+  if (diffValorRecebido != 0){
+    return diffValorRecebido * -1;
+  }
+
+  var diffPontos = (a.pontos - b.pontos);
+  if (diffPontos != 0){
+    return diffPontos * -1;
+  }
+
+  var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
+  if (diffVitorias != 0){
+    return diffVitorias * -1;
+  }
+
+  var diffJogos = (a.jogos - b.jogos);
+  if (diffJogos != 0){
+    return diffJogos;
+  }
+}
+
 
 function compararPontosPorJogo(a, b){
   var diffPontosPorJogo = (a.pontosPorJogo - b.pontosPorJogo);
