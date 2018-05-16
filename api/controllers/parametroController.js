@@ -27,3 +27,7 @@ exports.alterar = function(req, res) {
     }
   });
 };
+
+exports.tema = function(req, res) {
+  return res.json(process.env.THEME || 'darkly');
+};
