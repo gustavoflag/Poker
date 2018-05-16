@@ -44,3 +44,15 @@ exports.excluir = function(req, res) {
     return res.json({ message: 'Lançamento excluído' });
   });
 };
+
+exports.saldo = function(req, res) {
+  LancamentoCaixa.find({}, function(err, lancamentos) {
+    var saldo = 0;
+
+    lancamentos.forEach(function (lancamento){
+      saldo += lancamento.valor;
+    });
+
+    return res.json(saldo);
+  });
+};

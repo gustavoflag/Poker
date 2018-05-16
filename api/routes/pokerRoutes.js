@@ -78,6 +78,9 @@ module.exports = function(app) {
   app.route('/tema')
     .get(parametroController.tema);
 
+  app.route('/saldoCaixa')
+    .get(lancamentoCaixaController.saldo)
+
   app.route('/lancamentoCaixa')
     .get(lancamentoCaixaController.listar)
     .post(usuarioController.loginRequerido, lancamentoCaixaController.inserir);
