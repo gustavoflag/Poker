@@ -10,6 +10,7 @@ var express = require('express'),
   Usuario = require('./api/models/usuario'),
   Parametro = require('./api/models/parametro'),
   LancamentoCaixa = require('./api/models/lancamentoCaixa'),
+  PreJogo = require('./api/models/preJogo'),
   bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;

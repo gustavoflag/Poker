@@ -7,6 +7,7 @@ module.exports = function(app) {
   var usuarioController = require('../controllers/usuarioController.js');
   var parametroController = require('../controllers/parametroController.js');
   var lancamentoCaixaController = require('../controllers/lancamentoCaixaController.js');
+  var preJogoController = require('../controllers/preJogoController.js');
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
@@ -89,5 +90,16 @@ module.exports = function(app) {
     .get(lancamentoCaixaController.consultar)
     .put(usuarioController.loginRequerido, lancamentoCaixaController.alterar)
     .delete(usuarioController.loginRequerido, lancamentoCaixaController.excluir);
+
+  app.route('/preJogo')
+    .get(preJogoController.consultar)
+    .put(usuarioController.loginRequerido, preJogoController.alterarJogador)
+    .post(usuarioController.loginRequerido, preJogoController.inserir);
+
+  app.route('/preJogo/gerarJogo')
+    .post(usuarioController.loginRequerido, preJogoController.gerarJogo);
+
+  app.route('/preJogo/sortear')
+    .post(usuarioController.loginRequerido, preJogoController.sortear);
 
 };
