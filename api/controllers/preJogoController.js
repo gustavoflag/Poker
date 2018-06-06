@@ -46,8 +46,11 @@ exports.alterarJogador = function(req, res){
         return res.status(440).json({ message: 'Jogador não encontrado' });
       }
 
-      if (req.body.eliminado)
+      if (req.body.eliminado){
         jogador.eliminado = req.body.eliminado;
+      } else {
+        jogador.eliminado = false;
+      }
 
       if (req.body.lugar){
         jogador.lugar = req.body.lugar;
@@ -55,8 +58,11 @@ exports.alterarJogador = function(req, res){
         jogador.lugar = undefined;
       }
 
-      if (req.body.rebuy)
+      if (req.body.rebuy) {
         jogador.rebuy = req.body.rebuy;
+      } else {
+        jogador.rebuy = 0;
+      }
 
       salvarPreJogo(res, preJogo, 'Jogador alterado');
     })
