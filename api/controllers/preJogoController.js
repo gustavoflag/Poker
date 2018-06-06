@@ -49,8 +49,11 @@ exports.alterarJogador = function(req, res){
       if (req.body.eliminado)
         jogador.eliminado = req.body.eliminado;
 
-      if (req.body.lugar)
+      if (req.body.lugar){
         jogador.lugar = req.body.lugar;
+      } else {
+        jogador.lugar = undefined;
+      }
 
       if (req.body.rebuy)
         jogador.rebuy = req.body.rebuy;
