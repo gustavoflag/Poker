@@ -13,6 +13,9 @@ var ParametroSchema = new Schema({
   },
   participantesPremiacaoTerceiro: {
     type: Number
+  },
+  jogadoresRedraw: {
+    type: Number
   }
 });
 
