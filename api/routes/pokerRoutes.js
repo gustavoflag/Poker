@@ -95,6 +95,7 @@ module.exports = function(app) {
     .get(preJogoController.consultar)
     .put(usuarioController.loginRequerido, preJogoController.alterarJogador)
     .post(usuarioController.loginRequerido, preJogoController.inserir);
+    .delete(usuarioController.loginRequerido, preJogoController.excluir);
 
   app.route('/preJogo/gerarJogo')
     .post(usuarioController.loginRequerido, preJogoController.gerarJogo);

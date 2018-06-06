@@ -113,3 +113,23 @@ exports.gerarJogo = function(req, res){
       return res.status(440).json(err);
     });
 };
+
+exports.excluir = function(req, res) {
+  PreJogo.findOne({ })
+    .then((preJogo) => {
+      if (!preJogo){
+        return res.status(440).json({ message: 'Pré-jogo não encontrado' });
+      }
+
+      PreJogo.remove({ _id: preJogo._id })
+        .then((exclusao) => {
+          return res.json({ message: 'Pré-jogo cancelado' });
+        })
+        .catch((err) => {
+          return res.status(440).json(err);
+        });
+    })
+    .catch((err) => {
+      return res.status(440).json(err);
+    });
+};
