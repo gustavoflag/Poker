@@ -64,6 +64,10 @@ exports.alterarJogador = function(req, res){
         jogador.rebuy = 0;
       }
 
+      var listaOrdenadaMesa = preJogo.participantes.filter((par) => !par.eliminado).sort(sortBy('lugarNaMesa'));
+
+      preJogo.participantes = listaOrdenadaMesa.concat(preJogo.participantes.filter((par) => par.eliminado).sort(sortBy('lugar')));
+
       salvarPreJogo(res, preJogo, 'Jogador alterado');
     })
     .catch((err) => {
