@@ -34,6 +34,27 @@ exports.inserir = function(req, res){
   salvarPreJogo(res, novoPreJogo, 'Pré-Jogo salvo');
 };
 
+exports.excluirJogador = function(req, res){
+  PreJogo.findOne({ })
+    .then((preJogo) => {
+      if (!preJogo){
+        return res.status(440).json({ message: 'Pré jogo não encontrado' });
+      }
+
+      var indiceJogador = preJogo.participantes.findIndex((par) => par.nomeJogador === req.body.nomeJogador);
+      if (indiceJogador === -1){
+        return res.status(440).json({ message: 'Jogador não encontrado' });
+      }
+
+      preJogo.participantes.splice(indiceJogador, 1);
+
+      salvarPreJogo(res, preJogo, 'Jogador Excluído');
+    })
+    .catch((err) => {
+      return res.status(440).json(err);
+    });
+}
+
 exports.alterarJogador = function(req, res){
   PreJogo.findOne({ })
     .then((preJogo) => {
