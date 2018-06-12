@@ -23,6 +23,9 @@ var PreJogoSchema = new Schema({
       rebuy: {
         type: Number,
         default: 0
+      },
+      mesa: {
+        type: Number
       }
     }],
     required: true,
@@ -32,6 +35,12 @@ var PreJogoSchema = new Schema({
     type: Date,
     default: Date.now,
     required: 'Data é obrigatório!'
+  },
+  qtdMesas: {
+    type: Number
+  },
+  sorteado: {
+    type: Boolean
   }
 });
 

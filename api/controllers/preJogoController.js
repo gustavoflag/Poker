@@ -34,6 +34,43 @@ exports.inserir = function(req, res){
   salvarPreJogo(res, novoPreJogo, 'Pré-Jogo salvo');
 };
 
+exports.adicionarJogador = function(req, res){
+  PreJogo.findOne({ })
+    .then((preJogo) => {
+
+      var jogador = preJogo.participantes.filter((par) => par.nomeJogador === req.body.nomeJogador)[0];
+      if (jogador){
+        return res.status(440).json({ message: 'Jogador já no jogo' });
+      }
+
+      var qtdMenor = 0;
+      var mesaMenor = 0;
+      var msgRetorno = "Jogador incluído com sucesso";
+
+      if (preJogo.sorteado){
+        for (var i = 1; i <= preJogo.qtdMesas; i++){
+          var qtdI = preJogo.participantes.filter((p) => p.mesa === i).length;
+          if (qtdMenor === 0 || qtdI < qtdMenor){
+            qtdMenor = qtdI;
+            mesaMenor = i;
+          }
+        }
+
+        msgRetorno = `${req.body.nomeJogador} incluído na mesa ${mesaMenor}`;
+
+        req.body.mesa = mesaMenor;
+        req.body.lugarNaMesa = qtdMenor + 1;
+      }
+
+      preJogo.participantes = preJogo.participantes.concat(req.body);
+
+      salvarPreJogo(res, preJogo, msgRetorno);
+    })
+    .catch((err) => {
+      return res.status(440).json(err);
+    });
+};
+
 exports.excluirJogador = function(req, res){
   PreJogo.findOne({ })
     .then((preJogo) => {
@@ -53,7 +90,7 @@ exports.excluirJogador = function(req, res){
     .catch((err) => {
       return res.status(440).json(err);
     });
-}
+};
 
 exports.alterarJogador = function(req, res){
   PreJogo.findOne({ })
@@ -106,15 +143,26 @@ exports.sortear = function(req, res){
       var listaOrdenada = [];
       var length = preJogo.participantes.filter((par) => !par.eliminado).length;
 
+      var tamanhoMaximoMesa = 11;
+      preJogo.qtdMesas = Math.ceil(length / tamanhoMaximoMesa);
+      var indiceDivisao = Math.ceil(length / preJogo.qtdMesas);
+      preJogo.sorteado = true;
+
       for(var i = 0; i < length; i++){
         var participante = randomItem(preJogo.participantes.filter((par) => !par.eliminado));
 
-        participante.lugarNaMesa = i + 1;
+        participante.mesa = Math.ceil((i + 1) / indiceDivisao);
+        participante.lugarNaMesa = (i % indiceDivisao) + 1;
+
         listaOrdenada.push(participante);
 
         var indexRemove = preJogo.participantes.indexOf(participante);
         preJogo.participantes.splice(indexRemove, 1);
       }
+
+      preJogo.participantes.filter((par) => par.eliminado).forEach((p) => {
+        p.mesa = null;
+      });
 
       preJogo.participantes = listaOrdenada.concat(preJogo.participantes.filter((par) => par.eliminado).sort(sortBy('lugar')));
 

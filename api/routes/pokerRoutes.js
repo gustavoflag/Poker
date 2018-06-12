@@ -103,6 +103,9 @@ module.exports = function(app) {
   app.route('/preJogo/sortear')
     .post(usuarioController.loginRequerido, preJogoController.sortear);
 
+  app.route('/preJogo/adicionarJogador')
+    .post(usuarioController.loginRequerido, preJogoController.adicionarJogador);
+
   app.route('/preJogo/excluirJogador')
     .post(usuarioController.loginRequerido, preJogoController.excluirJogador);
 
