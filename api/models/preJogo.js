@@ -26,6 +26,10 @@ var PreJogoSchema = new Schema({
       },
       mesa: {
         type: Number
+      },
+      pago: {
+        type: Boolean,
+        default: false
       }
     }],
     required: true,

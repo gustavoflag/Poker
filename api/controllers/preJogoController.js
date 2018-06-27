@@ -122,6 +122,12 @@ exports.alterarJogador = function(req, res){
         jogador.rebuy = 0;
       }
 
+      if (req.body.pago) {
+        jogador.pago = req.body.pago;
+      } else {
+        jogador.pago = false;
+      }
+
       var listaOrdenadaMesa = preJogo.participantes.filter((par) => !par.eliminado).sort(sortBy('lugarNaMesa'));
 
       preJogo.participantes = listaOrdenadaMesa.concat(preJogo.participantes.filter((par) => par.eliminado).sort(sortBy('lugar')));
