@@ -61,14 +61,18 @@ exports.inserir = function(req, res) {
         parametro.participantesPremiacaoTerceiro = 9999;
       }
 
+      //colocar parâmetro
+
       if (novoJogo.participantes.length >= parametro.participantesPremiacaoTerceiro){
-        premiacaoTerceiro = parametro.valorBuyIn + parametro.valorMaleta;
-        premiacaoSegundo = (parametro.valorBuyIn + parametro.valorMaleta) * 2;
+        premiacaoTerceiro = (parametro.valorBuyIn + parametro.valorMaleta) - 10;
+        premiacaoSegundo = ((parametro.valorBuyIn + parametro.valorMaleta) * 2) - 10;
       } else {
-        premiacaoSegundo = parametro.valorBuyIn + parametro.valorMaleta;
+        premiacaoSegundo = (parametro.valorBuyIn + parametro.valorMaleta) - 20;
       }
 
-      premiacaoPrimeiro = premiacaoTotal - premiacaoSegundo - premiacaoTerceiro;
+      premiacaoPrimeiro = ((((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro) -20) / 2) + 20);
+
+      //
 
       novoJogo.valorMaleta = novoJogo.participantes.length * parametro.valorMaleta;
 
