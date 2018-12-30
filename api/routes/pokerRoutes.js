@@ -58,6 +58,9 @@ module.exports = function(app) {
     .get(jogoController.listar)
     .post(usuarioController.loginRequerido, jogoController.inserir);
 
+  app.route('/jogoDireto')
+    .post(usuarioController.loginRequerido, jogoController.inserirDireto);
+
   app.route('/jogo/:jogoId')
     .get(jogoController.consultar)
     .put(usuarioController.loginRequerido, jogoController.alterar)
