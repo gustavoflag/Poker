@@ -188,6 +188,7 @@ exports.inserir = function(req, res) {
 
 exports.inserirDireto = function(req, res) {
   var novoJogo = new Jogo(req.body);
+  var count = 0;
   novoJogo.participantes.forEach(function (participante){
     Jogador.findOne({ nome: participante.nomeJogador }, function(err, jogadorParticipante) {
       if (err)
