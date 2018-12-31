@@ -102,6 +102,27 @@ exports.inserir = function(req, res) {
   });
 };
 
+exports.inserirLote = function(req, res){
+  var jogadores = req.body;
+
+  jogadores.forEach((jogadorBody) => {
+    var novoJogador = new Jogador(jogadorBody);
+
+    novoJogador.historicoJogos = [];
+    novoJogador.historicoJogos.push({ lugar:-1, quantidade:0 });
+
+    for (var i = 1; i <= 15; i++){
+      novoJogador.historicoJogos.push({ lugar:i, quantidade:0 });
+    }
+
+    novoJogador.save(function(err, task) {
+      if (err)
+        return res.status(440).json(err);
+      return res.json(task);
+    });
+  });
+};
+
 exports.consultar = function(req, res) {
   Jogador.findById(req.params.jogadorId, function(err, jogador) {
     if (err)
