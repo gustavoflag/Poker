@@ -17,19 +17,25 @@ exports.exportar = function(req, res){
     if (err)
       return res.status(440).json(err);
 
-      jogadores.forEach((jogador) => {
-        jogador._id = undefined;
-        jogador.titulos = undefined;
-        /*jogador.historicoJogos = undefined;
-        jogador.valorRecebido = 0;
-        jogador.valorInvestido = 0;
-        jogador.pontos = 0;
-        jogador.jogos = 0;
-        jogador.rookie = false;*/
-      });
+    var jogadoresExport = [Jogador];
+
+    jogadores.forEach((jogador) => {
+      var jogExport = new Jogador();
+      jogExport.nome = jogador.nome;
+      jogadoresExport.push(jogExport);
+
+      /*jogador._id = undefined;
+      jogador.titulos = undefined;
+      jogador.historicoJogos = undefined;
+      jogador.valorRecebido = 0;
+      jogador.valorInvestido = 0;
+      jogador.pontos = 0;
+      jogador.jogos = 0;
+      jogador.rookie = false;*/
+    });
 
 
-    return res.json(jogadores.sort(sortBy('nome')));
+    return res.json(jogadoresExport.sort(sortBy('nome')));
   });
 };
 
