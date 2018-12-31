@@ -32,7 +32,7 @@ module.exports = function(app) {
     .post(usuarioController.loginRequerido, jogadorController.inserir);
 
   app.route('/jogador/inserirLote')
-    .post(usuarioController.loginRequerido, jogadorController.inserir);
+    .post(usuarioController.loginRequerido, jogadorController.inserirLote);
 
   app.route('/jogador/exportar')
     .get(jogadorController.exportar);
