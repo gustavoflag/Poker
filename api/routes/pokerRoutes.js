@@ -76,7 +76,7 @@ module.exports = function(app) {
     .get(jogoController.quantidade);
 
   app.route('/auth/cadastrar')
-    .post(usuarioController.inserir);
+    .post(usuarioController.loginRequerido, usuarioController.inserir);
 
   app.route('/auth/login')
     .post(usuarioController.login);
