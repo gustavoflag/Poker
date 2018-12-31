@@ -116,13 +116,14 @@ exports.inserirLote = function(req, res){
       novoJogador.historicoJogos.push({ lugar:i, quantidade:0 });
     }
 
+    novoJogador.save(function(err, task) {
+      if (err)
+        return res.status(440).json(err);
+    });
+
     count++;
     if (count === jogadores.length){
-      novoJogador.save(function(err, task) {
-        if (err)
-          return res.status(440).json(err);
-        return res.json(task);
-      });
+      return res.json(jogadores);
     }
   });
 };
