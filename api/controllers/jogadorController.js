@@ -22,18 +22,9 @@ exports.exportar = function(req, res){
     jogadores.forEach((jogador) => {
       var jogExport = new Jogador();
       jogExport.nome = jogador.nome;
+      jogExport.titulos = jogador.titulos;
       jogadoresExport.push(jogExport);
-
-      /*jogador._id = undefined;
-      jogador.titulos = undefined;
-      jogador.historicoJogos = undefined;
-      jogador.valorRecebido = 0;
-      jogador.valorInvestido = 0;
-      jogador.pontos = 0;
-      jogador.jogos = 0;
-      jogador.rookie = false;*/
     });
-
 
     return res.json(jogadoresExport.sort(sortBy('nome')));
   });
