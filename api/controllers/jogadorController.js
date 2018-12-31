@@ -105,6 +105,7 @@ exports.inserir = function(req, res) {
 exports.inserirLote = function(req, res){
   var jogadores = req.body;
 
+  var count = 0;
   jogadores.forEach((jogadorBody) => {
     var novoJogador = new Jogador(jogadorBody);
 
@@ -115,11 +116,14 @@ exports.inserirLote = function(req, res){
       novoJogador.historicoJogos.push({ lugar:i, quantidade:0 });
     }
 
-    novoJogador.save(function(err, task) {
-      if (err)
-        return res.status(440).json(err);
-      return res.json(task);
-    });
+    count++;
+    if (count === jogadores.length){
+      novoJogador.save(function(err, task) {
+        if (err)
+          return res.status(440).json(err);
+        return res.json(task);
+      });
+    }
   });
 };
 
