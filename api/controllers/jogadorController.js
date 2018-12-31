@@ -19,6 +19,7 @@ exports.exportar = function(req, res){
 
       jogadores.forEach((jogador) => {
         jogador._id = undefined;
+        jogador.titulos = undefined;
         /*jogador.historicoJogos = undefined;
         jogador.valorRecebido = 0;
         jogador.valorInvestido = 0;
