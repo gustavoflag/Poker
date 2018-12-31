@@ -12,6 +12,26 @@ exports.listar = function(req, res) {
   });
 };
 
+exports.exportar = function(req, res){
+  Jogador.find({}, function(err, jogadores) {
+    if (err)
+      return res.status(440).json(err);
+
+      jogadores.forEach((jogador) => {
+        jogador._id = undefined;
+        /*jogador.historicoJogos = undefined;
+        jogador.valorRecebido = 0;
+        jogador.valorInvestido = 0;
+        jogador.pontos = 0;
+        jogador.jogos = 0;
+        jogador.rookie = false;*/
+      });
+
+
+    return res.json(jogadores.sort(sortBy('nome')));
+  });
+};
+
 exports.classificacao = function(req, res) {
   var ordem = req.params.ordem;
 
