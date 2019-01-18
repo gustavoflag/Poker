@@ -15,7 +15,8 @@ var express = require('express'),
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/poker');
-//mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_b595dzsg:8qcrfj4oqhv4q8pkjs4iiv7nfm@ds141657.mlab.com:41657/heroku_b595dzsg');
+//mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_b595dzsg:8qcrfj4oqhv4q8pkjs4iiv7nfm@ds141657.mlab.com:41657/heroku_b595dzsg'); //2018
+//mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_1h8pfvcr:e5r69cvt2q9qfphibu5mjiej40@ds141960.mlab.com:41960/heroku_1h8pfvcr'); //2019
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

@@ -33,109 +33,85 @@ exports.quantidade = function(req, res){
 exports.inserir = function(req, res) {
   var novoJogo = new Jogo(req.body);
 
-  Pontuacao.find({}, function(err, pontuacoes) {
+  Jogo.find({}).limit(1).sort({ numero: -1 }).exec((err, jog)=>{
 
-    if (!pontuacoes)
-      return res.status(440).json({ errmsg: "Pontuações não encontradas" });
+    if (jog && !err){
+      novoJogo.numero = jog.numero + 1;
+    } else {
+      novoJogo.numero = 1;
+    }
 
-    Parametro.findOne({ }, function(err, parametro) {
-      if (!parametro)
-        return res.status(440).json({ errmsg: "Parâmetros não encontrados" });
+    Pontuacao.find({}, function(err, pontuacoes) {
 
-      var premiacaoPrimeiro = 0;
-      var premiacaoSegundo = 0;
-      var premiacaoTerceiro = 0;
+      if (!pontuacoes)
+        return res.status(440).json({ errmsg: "Pontuações não encontradas" });
 
-      //var rebuys = novoJogo.participantes.filter((p) => p.rebuy > 0);
+      Parametro.findOne({ }, function(err, parametro) {
+        if (!parametro)
+          return res.status(440).json({ errmsg: "Parâmetros não encontrados" });
 
-      var qtdeRebuy = 0;
+        var premiacaoPrimeiro = 0;
+        var premiacaoSegundo = 0;
+        var premiacaoTerceiro = 0;
 
-      for (var i = 0; i < novoJogo.participantes.length; i++){
-        qtdeRebuy += novoJogo.participantes[i].rebuy;
-      }
+        //var rebuys = novoJogo.participantes.filter((p) => p.rebuy > 0);
 
-      var premiacaoTotal = (novoJogo.participantes.length * parametro.valorBuyIn)
-                            + (qtdeRebuy * parametro.valorBuyIn);
+        var qtdeRebuy = 0;
 
-      if (!parametro.participantesPremiacaoTerceiro){
-        parametro.participantesPremiacaoTerceiro = 9999;
-      }
+        for (var i = 0; i < novoJogo.participantes.length; i++){
+          qtdeRebuy += novoJogo.participantes[i].rebuy;
+        }
 
-      //colocar parâmetro
+        var premiacaoTotal = (novoJogo.participantes.length * parametro.valorBuyIn)
+                              + (qtdeRebuy * parametro.valorBuyIn);
 
-      if (novoJogo.participantes.length >= parametro.participantesPremiacaoTerceiro){
-        premiacaoTerceiro = (parametro.valorBuyIn + parametro.valorMaleta);
-        premiacaoSegundo = ((parametro.valorBuyIn + parametro.valorMaleta) * 2);
-      } else {
-        premiacaoSegundo = (parametro.valorBuyIn + parametro.valorMaleta);
-      }
+        if (!parametro.participantesPremiacaoTerceiro){
+          parametro.participantesPremiacaoTerceiro = 9999;
+        }
 
-      premiacaoPrimeiro = ((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro));
+        //colocar parâmetro
 
-      //
-
-      novoJogo.valorMaleta = novoJogo.participantes.length * parametro.valorMaleta;
-
-      var count = 0;
-
-      novoJogo.participantes.forEach(function (participante){
-        participante.valorInvestido = parametro.valorBuyIn + parametro.valorMaleta;
-
-        if(!participante.rebuy){
-          var pontuacao = pontuacoes.find(function(element, index, array) { return element.lugar === participante.lugar });
-
-          if (pontuacao){
-            participante.pontos = pontuacao.pontos;
-          }
+        if (novoJogo.participantes.length >= parametro.participantesPremiacaoTerceiro){
+          premiacaoTerceiro = (parametro.valorBuyIn + parametro.valorMaleta);
+          premiacaoSegundo = ((parametro.valorBuyIn + parametro.valorMaleta) * 2);
         } else {
-          participante.valorInvestido += (parametro.valorBuyIn * participante.rebuy);
+          premiacaoSegundo = (parametro.valorBuyIn + parametro.valorMaleta);
         }
 
-        if (participante.lugar === 1){
-          participante.valorRecebido = premiacaoPrimeiro;
-        } else if (participante.lugar === 2) {
-          participante.valorRecebido = premiacaoSegundo;
-        } else if (participante.lugar === 3) {
-          participante.valorRecebido = premiacaoTerceiro;
-        }
+        premiacaoPrimeiro = ((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro));
 
-        Jogador.findOne({ nome: participante.nomeJogador }, function(err, jogadorParticipante) {
-          if (err)
-            return res.status(440).json(err);
+        //
 
-          if (jogadorParticipante){
+        novoJogo.valorMaleta = novoJogo.participantes.length * parametro.valorMaleta;
 
-            jogadorParticipante.pontos += participante.pontos;
-            jogadorParticipante.valorRecebido += participante.valorRecebido;
-            jogadorParticipante.valorInvestido += participante.valorInvestido;
-            jogadorParticipante.jogos++;
+        var count = 0;
 
-            var historicoPosicao;
+        novoJogo.participantes.forEach(function (participante){
+          participante.valorInvestido = parametro.valorBuyIn + parametro.valorMaleta;
 
-            if (participante.rebuy > 0){
-              historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
-            } else {
-              historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
+          if(!participante.rebuy){
+            var pontuacao = pontuacoes.find(function(element, index, array) { return element.lugar === participante.lugar });
+
+            if (pontuacao){
+              participante.pontos = pontuacao.pontos;
             }
-
-            if (!historicoPosicao){
-              jogadorParticipante.historicoJogos.concat({ lugar:participante.lugar, quantidade:1 });
-            } else {
-              historicoPosicao.quantidade++;
-            }
-
-            jogadorParticipante.save(function(err, task) {
-                if (err){
-                  return res.status(440).json(err);
-                }
-            });
           } else {
-            var novoJogador = new Jogador({ nome: participante.nomeJogador });
-            novoJogador.save(function(err, jog) {
-              if (err)
-                return res.status(440).json(err);
+            participante.valorInvestido += (parametro.valorBuyIn * participante.rebuy);
+          }
 
-              jogadorParticipante = jog;
+          if (participante.lugar === 1){
+            participante.valorRecebido = premiacaoPrimeiro;
+          } else if (participante.lugar === 2) {
+            participante.valorRecebido = premiacaoSegundo;
+          } else if (participante.lugar === 3) {
+            participante.valorRecebido = premiacaoTerceiro;
+          }
+
+          Jogador.findOne({ nome: participante.nomeJogador }, function(err, jogadorParticipante) {
+            if (err)
+              return res.status(440).json(err);
+
+            if (jogadorParticipante){
 
               jogadorParticipante.pontos += participante.pontos;
               jogadorParticipante.valorRecebido += participante.valorRecebido;
@@ -144,7 +120,7 @@ exports.inserir = function(req, res) {
 
               var historicoPosicao;
 
-              if (participante.rebuy){
+              if (participante.rebuy > 0){
                 historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
               } else {
                 historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
@@ -156,30 +132,63 @@ exports.inserir = function(req, res) {
                 historicoPosicao.quantidade++;
               }
 
-              jogadorParticipante.save(function(err, jog) {
-                  if (err)
+              jogadorParticipante.save(function(err, task) {
+                  if (err){
                     return res.status(440).json(err);
+                  }
               });
-            });
-          }
-
-          count++;
-          if (count === novoJogo.participantes.length){
-            novoJogo.save(function(err, jogo) {
-              if (err)
-                return res.status(440).json(err);
-
-              var strData = (novoJogo.data.getDate() + '/' + (novoJogo.data.getMonth() + 1) + '/' +  novoJogo.data.getFullYear());
-              var lctoCaixa = new LancamentoCaixa({ data: novoJogo.data, valor: novoJogo.valorMaleta, descricao: 'Jogo - data: ' + strData, idJogo: jogo._id });
-
-              lctoCaixa.save(function(err, lcto) {
+            } else {
+              var novoJogador = new Jogador({ nome: participante.nomeJogador });
+              novoJogador.save(function(err, jog) {
                 if (err)
                   return res.status(440).json(err);
-              });
 
-              return res.json(jogo);
-            });
-          }
+                jogadorParticipante = jog;
+
+                jogadorParticipante.pontos += participante.pontos;
+                jogadorParticipante.valorRecebido += participante.valorRecebido;
+                jogadorParticipante.valorInvestido += participante.valorInvestido;
+                jogadorParticipante.jogos++;
+
+                var historicoPosicao;
+
+                if (participante.rebuy){
+                  historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === -1 });
+                } else {
+                  historicoPosicao = jogadorParticipante.historicoJogos.find(function(element, index, array) { return element.lugar === participante.lugar });
+                }
+
+                if (!historicoPosicao){
+                  jogadorParticipante.historicoJogos.concat({ lugar:participante.lugar, quantidade:1 });
+                } else {
+                  historicoPosicao.quantidade++;
+                }
+
+                jogadorParticipante.save(function(err, jog) {
+                    if (err)
+                      return res.status(440).json(err);
+                });
+              });
+            }
+
+            count++;
+            if (count === novoJogo.participantes.length){
+              novoJogo.save(function(err, jogo) {
+                if (err)
+                  return res.status(440).json(err);
+
+                var strData = (novoJogo.data.getDate() + '/' + (novoJogo.data.getMonth() + 1) + '/' +  novoJogo.data.getFullYear());
+                var lctoCaixa = new LancamentoCaixa({ data: novoJogo.data, valor: novoJogo.valorMaleta, descricao: 'Jogo - data: ' + strData, idJogo: jogo._id });
+
+                lctoCaixa.save(function(err, lcto) {
+                  if (err)
+                    return res.status(440).json(err);
+                });
+
+                return res.json(jogo);
+              });
+            }
+          });
         });
       });
     });
@@ -277,14 +286,14 @@ exports.consultar = function(req, res) {
 };
 
 exports.alterar = function(req, res) {
-  this.excluir(req, res);
+  //this.excluir(req, res);
 
-  return this.incluir(req, res);
-  /*Jogo.findOneAndUpdate({_id: req.params.jogoId}, req.body, {new: true}, function(err, jogo) {
+  //return this.incluir(req, res);
+  Jogo.findOneAndUpdate({_id: req.params.jogoId}, req.body, {new: true}, function(err, jogo) {
     if (err)
       return res.status(440).json(err);
     return res.json(jogo);
-  });*/
+  });
 };
 
 exports.excluir = function(req, res) {

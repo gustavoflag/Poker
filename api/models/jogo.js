@@ -18,6 +18,10 @@ var JogoSchema = new Schema({
   valorMaleta: {
     type: Number,
     default: 0
+  },
+  numero: {
+    type: Number,
+    default: 0
   }
 });
 
