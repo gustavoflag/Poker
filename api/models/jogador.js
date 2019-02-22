@@ -98,6 +98,10 @@ var JogadorSchema = new Schema({
   },
   posicaoMediaPosicao:{
     type: Number
+  },
+  socio:{
+    type: Boolean,
+    default: false
   }
 });
 

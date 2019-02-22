@@ -27,6 +27,14 @@ var ParticipanteSchema = new Schema({
   rebuy: {
     type: Number,
     default: 0
+  },
+  jogosCampeonato: {
+    type: Number,
+    default: 0
+  },
+  pontosCampeonato: {
+    type: Number,
+    default: 0
   }
 });
 
