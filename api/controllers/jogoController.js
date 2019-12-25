@@ -34,7 +34,7 @@ exports.inserir = function(req, res) {
   var novoJogo = new Jogo(req.body);
 
   Jogo.find({}).limit(1).sort({ numero: -1 }).exec((err, jog)=>{
-    if (jog && jog !== []){
+    if (jog && jog !== [] && jog[0]){
       novoJogo.numero = jog[0].numero + 1;
     } 
 
