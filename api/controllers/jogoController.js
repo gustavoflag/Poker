@@ -55,8 +55,6 @@ exports.inserir = function(req, res) {
         var premiacaoSegundo = 0;
         var premiacaoTerceiro = 0;
 
-        //var rebuys = novoJogo.participantes.filter((p) => p.rebuy > 0);
-
         var qtdeRebuy = 0;
 
         for (var i = 0; i < novoJogo.participantes.length; i++){
@@ -64,7 +62,7 @@ exports.inserir = function(req, res) {
         }
 
         var premiacaoTotal = (novoJogo.participantes.length * parametro.valorBuyIn)
-                              + (qtdeRebuy * parametro.valorBuyIn);
+                              + (qtdeRebuy * (parametro.valorBuyIn + parametro.valorMaleta));
 
         if (!parametro.participantesPremiacaoTerceiro){
           parametro.participantesPremiacaoTerceiro = 9999;
@@ -97,7 +95,7 @@ exports.inserir = function(req, res) {
               participante.pontos = pontuacao.pontos;
             }
           } else {
-            participante.valorInvestido += (parametro.valorBuyIn * participante.rebuy);
+            participante.valorInvestido += ((parametro.valorBuyIn + parametro.valorMaleta) * participante.rebuy);
           }
 
           if (participante.lugar === 1){
