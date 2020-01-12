@@ -39,6 +39,14 @@ exports.classificacao = function(req, res) {
   classificacaoGeral(ordem, function(err, jogadores){
     if (err)
       return res.status(440).json(err);
+
+    var i = 0;
+
+    jogadores.forEach(jogador => {
+      jogador.classificacao = i;
+      i++;
+    });
+
     return res.json(jogadores);
   });
 };
@@ -276,7 +284,7 @@ function getEstatisticasJogador(jogador){
   jogador.qtdVitorias = 0;
 
   jogador.historicoJogos.forEach((historico) => {
-    if (historico.lugar <= 6 && historico.lugar > 0){
+    if (historico.lugar <= 10 && historico.lugar > 0){
       jogador.qtdPontuacoes += historico.quantidade;
     }
     if (historico.lugar <= 2 && historico.lugar > 0){

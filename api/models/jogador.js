@@ -103,6 +103,9 @@ var JogadorSchema = new Schema({
     type: Boolean,
     default: false
   }
+  // classificacao:{
+  //   type: Number
+  // }
 });
 
 module.exports = mongoose.model('Jogador', JogadorSchema);
