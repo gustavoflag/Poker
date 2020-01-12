@@ -102,10 +102,10 @@ var JogadorSchema = new Schema({
   socio:{
     type: Boolean,
     default: false
+  },
+  classificacao:{
+    type: Number
   }
-  // classificacao:{
-  //   type: Number
-  // }
 });
 
 module.exports = mongoose.model('Jogador', JogadorSchema);
