@@ -40,7 +40,7 @@ exports.classificacao = function(req, res) {
     if (err)
       return res.status(440).json(err);
 
-    var i = 0;
+    var i = 1;
 
     jogadores.forEach(jogador => {
       jogador.classificacao = i;
