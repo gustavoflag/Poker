@@ -35,6 +35,14 @@ var ParticipanteSchema = new Schema({
   pontosCampeonato: {
     type: Number,
     default: 0
+  },
+  qtdVezesDealer: {
+    type: Number,
+    default: 0
+  },
+  dealer:{
+    type: Boolean,
+    default: false
   }
 });
 

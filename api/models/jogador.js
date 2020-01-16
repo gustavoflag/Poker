@@ -105,6 +105,10 @@ var JogadorSchema = new Schema({
   },
   classificacao:{
     type: Number
+  },
+  qtdVezesDealer:{
+    type:Number,
+    default: 0
   }
 });
 

@@ -30,6 +30,18 @@ var PreJogoSchema = new Schema({
       pago: {
         type: Boolean,
         default: false
+      },
+      qtdVezesDealer: {
+        type: Number,
+        default: 0
+      },
+      socio:{
+        type: Boolean,
+        default: false
+      },
+      dealer:{
+        type: Boolean,
+        default: false
       }
     }],
     required: true,
