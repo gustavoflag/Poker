@@ -52,6 +52,18 @@ exports.compararSaldo = function(a, b){
   }
 }
 
+exports.compararVezesDealer = function(a, b){
+  var diffqtdVezesDealer = (a.qtdVezesDealer - b.qtdVezesDealer);
+  if (diffqtdVezesDealer != 0){
+    return diffqtdVezesDealer;
+  }
+
+  var diffJogos = (a.jogos - b.jogos);
+  if (diffJogos != 0){
+    return diffJogos;
+  }
+}
+
 exports.compararValorRecebido = function(a, b){
   var diffValorRecebido = (a.valorRecebido - b.valorRecebido);
   if (diffValorRecebido != 0){

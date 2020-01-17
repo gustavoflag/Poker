@@ -270,6 +270,9 @@ function classificacaoGeral(ordem, callback){
       case "S":
         callback(null, jogadores.sort(jogadorOrders.compararSaldo));
         break;
+      case "D":
+        callback(null, jogadores.filter(jog => jog.socio).sort(jogadorOrders.compararVezesDealer));
+        break;
     }
 
   });

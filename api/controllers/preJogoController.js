@@ -157,30 +157,32 @@ exports.sortear = function(req, res){
 
       //length -= preJogo.qtdMesas; //Tirando os dealers que sorteiam primeiro
 
-      for(var mesa = 1; mesa < preJogo.qtdMesas + 1; mesa++){
+      if (!req.body.redraw){
+        for(var mesa = 1; mesa < preJogo.qtdMesas + 1; mesa++){
 
-        var minimoVezesDealer = preJogo.participantes.reduce((min, par) => par.qtdVezesDealer < min ? par.qtdVezesDealer : min, preJogo.participantes[0].qtdVezesDealer);
-
-        console.log('minimoVezesDealer', minimoVezesDealer);
-
-        var participante = randomItem(preJogo.participantes.filter((par) => !par.eliminado && par.socio && par.qtdVezesDealer == minimoVezesDealer));
-
-        participante.mesa = mesa;
-        participante.lugarNaMesa = 1;
-        if (!req.body.redraw || req.body.redraw == false){
-          participante.dealer = true;
+          var minimoVezesDealer = preJogo.participantes.filter((par) => !par.eliminado && par.socio).reduce((min, par) => par.qtdVezesDealer < min ? par.qtdVezesDealer : min, preJogo.participantes[0].qtdVezesDealer);
+  
+          //console.log('minimoVezesDealer', minimoVezesDealer);
+  
+          var participante = randomItem(preJogo.participantes.filter((par) => !par.eliminado && par.socio && par.qtdVezesDealer == minimoVezesDealer));
+  
+          participante.mesa = mesa;
+          participante.lugarNaMesa = 1;
+          if (!req.body.redraw || req.body.redraw == false){
+            participante.dealer = true;
+          }
+  
+          listaOrdenada.push(participante);
+  
+          //console.log('mesa:', participante.mesa, 'lugar:', participante.lugarNaMesa, 'nome:', participante.nomeJogador);
+  
+          var indexRemove = preJogo.participantes.indexOf(participante);
+          preJogo.participantes.splice(indexRemove, 1);
         }
-
-        listaOrdenada.push(participante);
-
-        console.log('mesa:', participante.mesa, 'lugar:', participante.lugarNaMesa, 'nome:', participante.nomeJogador);
-
-        var indexRemove = preJogo.participantes.indexOf(participante);
-        preJogo.participantes.splice(indexRemove, 1);
       }
-
-      for(var i = 1; i < length; i++){
-        if (i % indiceDivisao == 0){
+      
+      for(var i = (req.body.redraw ? 0 : 1); i < length; i++){
+        if (!req.body.redraw && i % indiceDivisao == 0){
           continue;
         }
         var participante = randomItem(preJogo.participantes.filter((par) => !par.eliminado));
@@ -190,7 +192,7 @@ exports.sortear = function(req, res){
 
         listaOrdenada.push(participante);
 
-        console.log('mesa:', participante.mesa, 'lugar:', participante.lugarNaMesa, 'nome:', participante.nomeJogador);
+        //console.log('mesa:', participante.mesa, 'lugar:', participante.lugarNaMesa, 'nome:', participante.nomeJogador);
 
         var indexRemove = preJogo.participantes.indexOf(participante);
         preJogo.participantes.splice(indexRemove, 1);
