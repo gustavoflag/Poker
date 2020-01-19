@@ -116,6 +116,10 @@ exports.inserir = function(req, res) {
               jogadorParticipante.valorRecebido += participante.valorRecebido;
               jogadorParticipante.valorInvestido += participante.valorInvestido;
               jogadorParticipante.jogos++;
+              
+              if (participante.dealer){
+                jogadorParticipante.qtdVezesDealer++;
+              }
 
               var historicoPosicao;
 
@@ -148,6 +152,10 @@ exports.inserir = function(req, res) {
                 jogadorParticipante.valorRecebido += participante.valorRecebido;
                 jogadorParticipante.valorInvestido += participante.valorInvestido;
                 jogadorParticipante.jogos++;
+
+                if (participante.dealer){
+                  jogadorParticipante.qtdVezesDealer++;
+                }  
 
                 var historicoPosicao;
 
