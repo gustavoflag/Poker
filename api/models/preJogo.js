@@ -42,6 +42,10 @@ var PreJogoSchema = new Schema({
       dealer:{
         type: Boolean,
         default: false
+      },
+      timeChip:{
+        type: Boolean,
+        default: true
       }
     }],
     required: true,
