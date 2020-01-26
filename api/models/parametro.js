@@ -16,6 +16,18 @@ var ParametroSchema = new Schema({
   },
   jogadoresRedraw: {
     type: Number
+  },
+  premiacaoSegundo: {
+    type: Number
+  },
+  premiacaoTerceiro: {
+    type: Number
+  },
+  qtdFichasBuyIn: {
+    type: Number
+  },
+  qtdFichasTimeChip: {
+    type: Number
   }
 });
 
