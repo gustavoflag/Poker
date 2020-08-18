@@ -54,14 +54,14 @@ module.exports = function(app) {
   app.route('/classificacaoEtapa/:etapa')
     .get(jogadorController.classificacaoEtapa);
 
-  app.route('/classificacaoEtapa')
-    .get(jogadorController.listarClassificacaoTodasEtapas);
+  //app.route('/classificacaoEtapa')
+  //  .get(jogadorController.listarClassificacaoTodasEtapas);
 
   // app.route('/gerarClassificacaoEtapas')
   //    .get(jogadorController.classificacaoTodasEtapas);
 
-  app.route('/classificacaoJogadorEtapa')
-    .get(jogadorController.classificacaoJogadorEtapa);
+  //app.route('/classificacaoJogadorEtapa')
+  //  .get(jogadorController.classificacaoJogadorEtapa);
 
   app.route('/classificacaoTodosMeses')
     .get(jogadorController.classificacaoTodosMeses);
