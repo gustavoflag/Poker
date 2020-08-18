@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var jogadorOrders = require('../helpers/jogadorOrders.js');
 Jogador = mongoose.model('Jogador');
 Jogo = mongoose.model('Jogo');
+ClassificacaoEtapa = mongoose.model('ClassificacaoEtapa');
 
 exports.listar = function(req, res) {
   Jogador.find({}, function(err, jogadores) {
@@ -91,6 +92,121 @@ exports.classificacaoTodosMeses = function(req, res){
       }
     });
   }
+};
+
+exports.classificacaoEtapa = function(req, res){
+  classEtapa(req.params.etapa, function(err, classificacao){
+    if (err)
+      return res.status(440).json(err);
+
+    return res.json(classificacao);
+  });
+};
+
+exports.classificacaoTodasEtapas = function(req, res){
+  Jogo.find({}, function(err, jogos) {
+    if (err)
+      return res.status(440).json(err);
+
+    var qtdJogos = jogos.length;
+    var etapasSalvas = 0;
+
+    for(var i = 1; i < qtdJogos + 1; i++){
+      classEtapa(i, function(err, etapa){
+        if (err)
+          return res.status(440).json(err);
+        
+        var novaEtapa = new ClassificacaoEtapa(etapa);
+        etapasSalvas++;
+
+        novaEtapa.save(function(err, task) {
+          if (err)
+            return res.status(440).json(err);
+
+          if (etapasSalvas == qtdJogos){
+            //return res.json({ res: "classificacao etapas gerada" });
+          }
+        });
+      });
+    }    
+  });
+};
+
+exports.listarClassificacaoTodasEtapas = function(req, res) {
+  ClassificacaoEtapa.find({}, function(err, classificacoes) {
+    if (err)
+      return res.status(440).json(err);
+
+    return res.json(classificacoes.sort(compararEtapas));
+  });
+};
+
+exports.classificacaoJogadorEtapa = function(req, res) {
+  ClassificacaoEtapa.find({}, function(err, classificacoes) {
+    if (err)
+      return res.status(440).json(err);
+
+    var pontuacaoEtapas = [];
+
+    classificacoes.forEach(classif => {
+      classif.classificacao.forEach(jogadorEtapa => {
+
+        var pontuacaoEtapa = null;
+        for (var i = 0; i < pontuacaoEtapas.length; i++){
+          if (pontuacaoEtapas[i].nomeJogador === jogadorEtapa.nomeJogador){
+            pontuacaoEtapa = pontuacaoEtapas[i];
+            break;
+          }
+        }
+
+        var pontosEtapa = {
+          etapa: classif.etapa,
+          pontos: jogadorEtapa.pontos
+        };
+
+        if (!pontuacaoEtapa){
+          var novaPontuacaoEtapa = {
+            nomeJogador: jogadorEtapa.nomeJogador,
+            pontosEtapa: []
+          };
+
+          novaPontuacaoEtapa.pontosEtapa.push(pontosEtapa);
+
+          pontuacaoEtapas.push(novaPontuacaoEtapa);
+        } else {
+          //jogador.pontos += participante.pontos;
+
+          pontuacaoEtapa.pontosEtapa.push(pontosEtapa);
+          pontuacaoEtapa.pontosEtapa.sort(compararEtapas);
+        }
+      });
+    });
+
+    var countJogadores = 0;
+    pontuacaoEtapas.forEach((pontuacaoEtapa) => {
+      Jogador.findOne({ nome: pontuacaoEtapa.nomeJogador }).then((jogador) => {
+        if (err)
+          return res.status(440).json(err);
+
+        jogador.pontuacaoEtapas = pontuacaoEtapa.pontosEtapa;
+
+        jogador.save()
+          .then((jog) => {
+            countJogadores++;
+            if (countJogadores == pontuacaoEtapas.length){
+              return res.json(pontuacaoEtapas);
+            }
+          })
+          .catch((err) => {
+            return res.status(440).json(err);
+          });
+      })
+      .catch((err) => {
+        console.log('err', err);
+        return res.status(440).json(err);
+      });
+    });
+  });
 };
 
 exports.inserir = function(req, res) {
@@ -247,6 +363,45 @@ function classMes(ano, mes, callback){
   });
 };
 
+function classEtapa(etapa, callback){
+  var jogadores = [];
+
+  Jogo.find({ numero: { $lte: etapa }}, function(err, jogos) {
+    if (err)
+      callback(err, null);
+
+    jogos.forEach(function (jogo){
+      jogo.participantes.forEach(function (participante){
+
+        var jogador = null;
+        for (var i = 0; i < jogadores.length; i++){
+          if (jogadores[i].nomeJogador === participante.nomeJogador){
+            jogador = jogadores[i];
+            break;
+          }
+        }
+        if (!jogador){
+          var novoJogador = {
+            nomeJogador: participante.nomeJogador,
+            pontos: participante.pontos
+          };
+
+          jogadores.push(novoJogador);
+        } else {
+          jogador.pontos += participante.pontos;
+        }
+      });
+    });
+
+      var retorno = {
+        etapa: etapa,
+        classificacao: jogadores.sort(jogadorOrders.compararPontos)
+      };
+
+      callback(null, retorno);
+  });
+};
+
 function classificacaoGeral(ordem, callback){
   Jogador.find({}, function(err, jogadores) {
     if (err)
@@ -308,6 +463,13 @@ function compararMeses(a, b){
   var diffMeses = (a.mes - b.mes);
   if (diffMeses != 0){
     return diffMeses * -1;
+  }
+}
+
+function compararEtapas(a, b){
+  var diffEtapas = (a.etapa - b.etapa);
+  if (diffEtapas != 0){
+    return diffEtapas;
   }
 }
 

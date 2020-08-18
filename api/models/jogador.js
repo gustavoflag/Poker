@@ -51,6 +51,16 @@ var JogadorSchema = new Schema({
       }
     }]
   },
+  pontuacaoEtapas:{
+    type:[{
+      etapa: { 
+        type: Number
+      },
+      pontos: {
+        type: Number
+      }
+    }]
+  },
   pontosPorJogo:{
     type: Number
   },

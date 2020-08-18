@@ -11,6 +11,7 @@ var express = require('express'),
   Parametro = require('./api/models/parametro'),
   LancamentoCaixa = require('./api/models/lancamentoCaixa'),
   PreJogo = require('./api/models/preJogo'),
+  ClassificacaoEtapa = require('./api/models/classificacaoEtapa'),
   bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
