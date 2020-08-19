@@ -99,7 +99,20 @@ exports.classificacaoEtapa = function(req, res){
     if (err)
       return res.status(440).json(err);
 
-    return res.json(classificacao);
+    ClassificacaoEtapa.findOne({ etapa: req.params.etapa }, function(err, classBanco){
+      if (!classBanco){
+        var novaEtapa = new ClassificacaoEtapa(classificacao);
+
+        novaEtapa.save(function(err, task) {
+          if (err)
+            return res.status(440).json(err);
+
+          return res.json(classificacao);
+        });
+      } else {
+        return res.json(classificacao);
+      }
+    });
   });
 };
 
