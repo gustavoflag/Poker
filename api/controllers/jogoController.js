@@ -190,9 +190,11 @@ exports.inserir = function(req, res) {
                 lctoCaixa.save(function(err, lcto) {
                   if (err)
                     return res.status(440).json(err);
-                });
 
-                return res.json(jogo);
+                  jogadorController.gerarClassificacaoEtapa(jogo.numero, function(err, classificacao){
+                    return res.json(jogo);
+                  });
+                });
               });
             }
           });

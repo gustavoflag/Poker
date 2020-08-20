@@ -95,24 +95,11 @@ exports.classificacaoTodosMeses = function(req, res){
 };
 
 exports.classificacaoEtapa = function(req, res){
-  classEtapa(req.params.etapa, function(err, classificacao){
+  gerarClassificacaoEtapa(req.params.etapa, function(err, classificacao){
     if (err)
       return res.status(440).json(err);
 
-    ClassificacaoEtapa.findOne({ etapa: req.params.etapa }, function(err, classBanco){
-      if (!classBanco){
-        var novaEtapa = new ClassificacaoEtapa(classificacao);
-
-        novaEtapa.save(function(err, task) {
-          if (err)
-            return res.status(440).json(err);
-
-          return res.json(classificacao);
-        });
-      } else {
-        return res.json(classificacao);
-      }
-    });
+    return res.json(classificacao);
   });
 };
 
@@ -415,6 +402,49 @@ function classEtapa(etapa, callback){
   });
 };
 
+function gerarClassificacaoEtapa(etapa, callback){
+  classEtapa(etapa, function(err, classificacao){
+    if (err)
+      callback(err, null);
+
+    ClassificacaoEtapa.findOne({ etapa: etapa }, function(err, classBanco){
+      if (!classBanco){
+        var novaEtapa = new ClassificacaoEtapa(classificacao);
+
+        novaEtapa.save(function(err, task) {
+          if (err)
+            callback(err, null);
+
+          var countJogadores = 0;
+          novaEtapa.classificacao.forEach(jogadorEtapa => {
+            Jogador.findOne({ nome: jogadorEtapa.nomeJogador }, function(err, jogBanco){
+              var indexEtapa = jogBanco.pontuacaoEtapas.map(function(e){ return e.etapa }).indexOf(novaEtapa.etapa);
+              if (indexEtapa && indexEtapa != -1){
+                jogBanco.pontuacaoEtapas[indexEtapa].pontos = jogadorEtapa.pontos;
+              } else {
+                var novaPontuacaoEtapa = { etapa: novaEtapa.etapa, pontos: jogadorEtapa.pontos };
+                jogBanco.pontuacaoEtapas.push(novaPontuacaoEtapa);
+              }
+
+              jogBanco.save(function(err, jog) {
+                if (err)
+                  callback(err, null);
+
+                countJogadores++;
+                if (countJogadores == novaEtapa.classificacao.length){
+                  callback(err, null);
+                }
+              });
+            });
+          })
+        });
+      } else {
+        callback(null, classificacao);
+      }
+    });
+  });
+};
+
 function classificacaoGeral(ordem, callback){
   Jogador.find({}, function(err, jogadores) {
     if (err)
@@ -477,14 +507,14 @@ function compararMeses(a, b){
   if (diffMeses != 0){
     return diffMeses * -1;
   }
-}
+};
 
 function compararEtapas(a, b){
   var diffEtapas = (a.etapa - b.etapa);
   if (diffEtapas != 0){
     return diffEtapas;
   }
-}
+};
 
 function encontraPosicao(jogadores, nomeJogador){
   return (jogadores.findIndex(j => j.nome == nomeJogador) + 1);
@@ -532,4 +562,4 @@ function nomeMes(indice, callback){
     }
 
     return callback(nomeMesI);
-}
+};
