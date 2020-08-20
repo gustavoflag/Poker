@@ -1,6 +1,7 @@
 var sortBy = require('sort-by');
 var mongoose = require('mongoose');
 var jogadorOrders = require('../helpers/jogadorOrders.js');
+
 Jogador = mongoose.model('Jogador');
 Jogo = mongoose.model('Jogo');
 ClassificacaoEtapa = mongoose.model('ClassificacaoEtapa');
@@ -308,6 +309,10 @@ exports.excluir = function(req, res) {
   });
 };
 
+exports.gerarClassificacaoEtapa = function(etapa, callback){
+  gerarClassificacaoEtapa(etapa, callback);
+};
+
 //Funções
 function classMes(ano, mes, callback){
   var jogadores = [];
@@ -405,7 +410,7 @@ function classEtapa(etapa, callback){
 function gerarClassificacaoEtapa(etapa, callback){
   classEtapa(etapa, function(err, classificacao){
     if (err)
-      callback(err, null);
+      callback(err, null);    
 
     ClassificacaoEtapa.findOne({ etapa: etapa }, function(err, classBanco){
       if (!classBanco){
@@ -423,7 +428,7 @@ function gerarClassificacaoEtapa(etapa, callback){
                 jogBanco.pontuacaoEtapas[indexEtapa].pontos = jogadorEtapa.pontos;
               } else {
                 var novaPontuacaoEtapa = { etapa: novaEtapa.etapa, pontos: jogadorEtapa.pontos };
-                jogBanco.pontuacaoEtapas.push(novaPontuacaoEtapa);
+                jogBanco.pontuacaoEtapas = jogBanco.pontuacaoEtapas.concat([novaPontuacaoEtapa]);
               }
 
               jogBanco.save(function(err, jog) {
@@ -432,7 +437,7 @@ function gerarClassificacaoEtapa(etapa, callback){
 
                 countJogadores++;
                 if (countJogadores == novaEtapa.classificacao.length){
-                  callback(err, null);
+                  callback(null, classificacao);
                 }
               });
             });

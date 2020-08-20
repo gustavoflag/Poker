@@ -5,6 +5,7 @@ Jogador = mongoose.model('Jogador'),
 Pontuacao = mongoose.model('Pontuacao'),
 Parametro = mongoose.model('Parametro'),
 LancamentoCaixa = mongoose.model('LancamentoCaixa');
+var jogadorController = require('./jogadorController.js');
 
 exports.listar = function(req, res) {
   Jogo.find({}, function(err, jogos) {
