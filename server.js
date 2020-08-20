@@ -18,7 +18,7 @@ mongoose.Promise = global.Promise;
 //mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/poker');
 //mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_b595dzsg:8qcrfj4oqhv4q8pkjs4iiv7nfm@ds141657.mlab.com:41657/heroku_b595dzsg'); //2018
 //mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_1h8pfvcr:e5r69cvt2q9qfphibu5mjiej40@ds141960.mlab.com:41960/heroku_1h8pfvcr'); //2019
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_5lgwrn5j:6fq01flrm14o51em30nk9nibob@ds023624.mlab.com:23624/heroku_5lgwrn5j'); //2020 - STG
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_dvvkpq45:6a04qh41uh1tgvk0dcgl3mhl4j@ds119578.mlab.com:19578/heroku_dvvkpq45'); //2020 - STG
 //mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_dvvkpq45:6a04qh41uh1tgvk0dcgl3mhl4j@ds119578.mlab.com:19578/heroku_dvvkpq45'); //2020
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
