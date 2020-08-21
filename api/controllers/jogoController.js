@@ -5,7 +5,9 @@ Jogador = mongoose.model('Jogador'),
 Pontuacao = mongoose.model('Pontuacao'),
 Parametro = mongoose.model('Parametro'),
 LancamentoCaixa = mongoose.model('LancamentoCaixa');
+ClassificacaoEtapa = mongoose.model('ClassificacaoEtapa');
 var jogadorController = require('./jogadorController.js');
+
 
 exports.listar = function(req, res) {
   Jogo.find({}, function(err, jogos) {
@@ -347,9 +349,16 @@ exports.excluir = function(req, res) {
       });
     });
 
+    ClassificacaoEtapa.remove({
+      etapa: jogo.numero
+    }, function(err, classif){
+      if (err)
+        return res.status(440).json(err);
+    });
+
     LancamentoCaixa.remove({
       idJogo: jogo._id
-    }, function(err, jogo) {
+    }, function(err, lcto) {
       if (err)
         return res.status(440).json(err);
     });
