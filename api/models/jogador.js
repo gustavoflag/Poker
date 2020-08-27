@@ -119,6 +119,9 @@ var JogadorSchema = new Schema({
   qtdVezesDealer:{
     type:Number,
     default: 0
+  },
+  foto: {
+    type: String
   }
 });
 
