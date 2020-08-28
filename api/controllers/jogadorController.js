@@ -79,6 +79,12 @@ exports.classificacaoTodosMeses = function(req, res){
   var dataAtual = new Date();
   var ano = dataAtual.getFullYear();
   var mesAno = dataAtual.getMonth() + 1;
+
+  if (req.params.ano && ano != req.params.ano){
+    ano = req.params.ano;
+    mesAno = 12;
+  }
+  
   var meses = [];
 
   for (var i = mesAno; i > 0; i--){
