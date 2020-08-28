@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "./node_modules/.bin/netlify-lambda serve /",
+    "build": "./node_modules/.bin/netlify-lambda build /"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -15,8 +16,10 @@
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^4.13.7",
     "morgan": "~1.9.0",
+    "netlify-lambda": "^2.0.1",
     "random-item": "^1.0.0",
     "serve-favicon": "~2.4.5",
+    "serverless-http": "^2.5.0",
     "sort-by": "^1.2.0"
   },
   "engines": {
