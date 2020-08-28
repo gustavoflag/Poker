@@ -1,7 +1,10 @@
-var express = require('express'),
-  app = express(),
-  port = process.env.PORT || 3000,
-  mongoose = require('mongoose'),
+const express = require('express');
+const serverless = require('serverless-http');
+const app = express();
+const router = express.Router();
+const routes = require('./api/routes/pokerRoutes');
+//const port = process.env.PORT || 3000,
+const mongoose = require('mongoose'),
   Pontuacao = require('./api/models/pontuacao'),
   Premiacao = require('./api/models/premiacao'),
   Jogador = require('./api/models/jogador'),
@@ -24,8 +27,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_dvvkpq45:6a04qh41u
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('./api/routes/pokerRoutes');
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
@@ -43,8 +44,16 @@ app.use(function(req, res, next) {
   }
 });
 
-routes(app);
+routes(router);
 
-app.listen(port);
+app.use('/.netlify/functions/server', router);
 
-console.log('API iniciada, porta: ' + port);
+module.exports.handler = serverless(app);
+
+//var routes = require('./api/routes/pokerRoutes');
+
+//routes(app);
+
+// app.listen(port);
+
+// console.log('API iniciada, porta: ' + port);
