@@ -297,6 +297,18 @@ exports.consultar = function(req, res) {
   });
 };
 
+exports.consultarPorNome = function(req, res) {
+  Jogador.findOne({nome: req.params.nomeJogador}, function(err, jogador) {
+    if (err)
+      return res.status(440).json(err);
+
+    if (jogador)
+      getEstatisticasJogador(jogador);
+
+    return res.json(jogador);
+  });
+};
+
 exports.alterar = function(req, res) {
   Jogador.findOneAndUpdate({_id: req.params.jogadorId}, req.body, {new: true}, function(err, task) {
     if (err)

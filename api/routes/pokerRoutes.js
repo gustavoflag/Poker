@@ -42,6 +42,9 @@ module.exports = function(app) {
     .get(jogadorController.consultar)
     .put(usuarioController.loginRequerido, jogadorController.alterar)
     .delete(usuarioController.loginRequerido, jogadorController.excluir);
+  
+  app.route('/jogador/porNome/:nomeJogador')
+    .get(jogadorController.consultarPorNome);
 
   app.route('/classificacao')
     .get(jogadorController.classificacao);
@@ -63,6 +66,9 @@ module.exports = function(app) {
 
   // app.route('/classificacaoJogadorEtapa')
   //  .get(jogadorController.classificacaoJogadorEtapa);
+
+  app.route('/classificacaoTodosMeses/:ano')
+    .get(jogadorController.classificacaoTodosMeses);
 
   app.route('/classificacaoTodosMeses')
     .get(jogadorController.classificacaoTodosMeses);
