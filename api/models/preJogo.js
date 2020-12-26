@@ -46,6 +46,10 @@ var PreJogoSchema = new Schema({
       timeChip:{
         type: Boolean,
         default: true
+      },
+      pontoExtra:{
+        type: Boolean,
+        default: false
       }
     }],
     required: true,

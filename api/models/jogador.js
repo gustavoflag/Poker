@@ -122,6 +122,10 @@ var JogadorSchema = new Schema({
   },
   foto: {
     type: String
+  },
+  pontosExtra: {
+    type:Number,
+    default: 0
   }
 });
 

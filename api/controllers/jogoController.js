@@ -96,6 +96,21 @@ exports.inserir = function(req, res) {
 
             if (pontuacao){
               participante.pontos = pontuacao.pontos;
+
+              if (parametro.pontosExtraKO && parametro.pontosExtraKO > 0){
+                if (participante.pontoExtra){
+                  var participantesPontoExtra = novoJogo.participantes.filter(p => p.pontoExtra);
+                  if (participantesPontoExtra && participantesPontoExtra.length > 1){
+                    participante.qtdPontosExtra = Math.ceil(parametro.pontosExtraKO / participantesPontoExtra.length);
+                  } else {
+                    participante.qtdPontosExtra = parametro.pontosExtraKO;
+                  }
+
+                  participante.pontos += participante.qtdPontosExtra;
+                }
+              } else {
+                participante.qtdPontosExtra = 0;
+              }
             }
           } else {
             participante.valorInvestido += ((parametro.valorBuyIn + parametro.valorMaleta) * participante.rebuy);
@@ -116,6 +131,7 @@ exports.inserir = function(req, res) {
             if (jogadorParticipante){
 
               jogadorParticipante.pontos += participante.pontos;
+              jogadorParticipante.pontosExtra += participante.qtdPontosExtra;
               jogadorParticipante.valorRecebido += participante.valorRecebido;
               jogadorParticipante.valorInvestido += participante.valorInvestido;
               jogadorParticipante.jogos++;
@@ -152,6 +168,7 @@ exports.inserir = function(req, res) {
                 jogadorParticipante = jog;
 
                 jogadorParticipante.pontos += participante.pontos;
+                jogadorParticipante.pontosExtra += participante.qtdPontosExtra;
                 jogadorParticipante.valorRecebido += participante.valorRecebido;
                 jogadorParticipante.valorInvestido += participante.valorInvestido;
                 jogadorParticipante.jogos++;
@@ -324,6 +341,7 @@ exports.excluir = function(req, res) {
               res.status(440).json(err);
 
             jogadorParticipante.pontos -= participante.pontos;
+            jogadorParticipante.pontosExtra -= participante.qtdPontosExtra;
             jogadorParticipante.valorInvestido -= participante.valorInvestido;
             jogadorParticipante.valorRecebido -= participante.valorRecebido;
             jogadorParticipante.jogos--;

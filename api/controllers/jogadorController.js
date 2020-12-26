@@ -25,6 +25,9 @@ exports.exportar = function(req, res){
       var jogExport = new Jogador();
       jogExport.nome = jogador.nome;
       jogExport.titulos = jogador.titulos;
+      jogExport.socio = jogador.socio;
+      jogExport._id = undefined;
+
       jogadoresExport.push(jogExport);
     });
 

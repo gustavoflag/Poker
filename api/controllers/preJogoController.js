@@ -134,6 +134,12 @@ exports.alterarJogador = function(req, res){
         jogador.timeChip = false;
       }
 
+      if (req.body.pontoExtra) {
+        jogador.pontoExtra = req.body.pontoExtra;
+      } else {
+        jogador.pontoExtra = false;
+      }
+
       var listaOrdenadaMesa = preJogo.participantes.filter((par) => !par.eliminado).sort(sortBy('lugarNaMesa'));
 
       preJogo.participantes = listaOrdenadaMesa.concat(preJogo.participantes.filter((par) => par.eliminado).sort(sortBy('lugar')));

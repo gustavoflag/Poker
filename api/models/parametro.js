@@ -28,6 +28,9 @@ var ParametroSchema = new Schema({
   },
   qtdFichasTimeChip: {
     type: Number
+  },
+  pontosExtraKO: {
+    type: Number
   }
 });
 

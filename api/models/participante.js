@@ -43,7 +43,15 @@ var ParticipanteSchema = new Schema({
   dealer:{
     type: Boolean,
     default: false
-  }
+  },
+  pontoExtra:{
+    type: Boolean,
+    default: false
+  },
+  qtdPontosExtra:{
+    type: Number,
+    default: 0
+  },
 });
 
 module.exports = {
