@@ -50,7 +50,7 @@ app.use(function(req, res, next) {
 routes(router);
 app.use('/.netlify/functions/server', router);
 module.exports.handler = serverless(app);
-var routes = require('./api/routes/pokerRoutes');
+
 
 /*LOCAL*/
 /*
