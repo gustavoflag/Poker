@@ -96,24 +96,24 @@ exports.inserir = function(req, res) {
 
             if (pontuacao){
               participante.pontos = pontuacao.pontos;
-
-              if (parametro.pontosExtraKO && parametro.pontosExtraKO > 0){
-                if (participante.pontoExtra){
-                  var participantesPontoExtra = novoJogo.participantes.filter(p => p.pontoExtra);
-                  if (participantesPontoExtra && participantesPontoExtra.length > 1){
-                    participante.qtdPontosExtra = Math.ceil(parametro.pontosExtraKO / participantesPontoExtra.length);
-                  } else {
-                    participante.qtdPontosExtra = parametro.pontosExtraKO;
-                  }
-
-                  participante.pontos += participante.qtdPontosExtra;
-                }
-              } else {
-                participante.qtdPontosExtra = 0;
-              }
             }
           } else {
             participante.valorInvestido += ((parametro.valorBuyIn + parametro.valorMaleta) * participante.rebuy);
+          }
+
+          if (parametro.pontosExtraKO && parametro.pontosExtraKO > 0){
+            if (participante.pontoExtra){
+              var participantesPontoExtra = novoJogo.participantes.filter(p => p.pontoExtra);
+              if (participantesPontoExtra && participantesPontoExtra.length > 1){
+                participante.qtdPontosExtra = Math.ceil(parametro.pontosExtraKO / participantesPontoExtra.length);
+              } else {
+                participante.qtdPontosExtra = parametro.pontosExtraKO;
+              }
+
+              participante.pontos += participante.qtdPontosExtra;
+            }
+          } else {
+            participante.qtdPontosExtra = 0;
           }
 
           if (participante.lugar === 1){
