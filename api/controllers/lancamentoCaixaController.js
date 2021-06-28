@@ -2,51 +2,58 @@ var sortBy = require('sort-by');
 var mongoose = require('mongoose'),
 LancamentoCaixa = mongoose.model('LancamentoCaixa');
 
-exports.listar = function(req, res) {
-  LancamentoCaixa.find({}, function(err, lancamentos) {
-    if (err)
-      return res.status(440).json(err);
+exports.listar = async function(req, res) {
+  try {
+    const lancamentos = await LancamentoCaixa.find({});
     return res.json(lancamentos.sort(sortBy('-data')));
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.inserir = function(req, res) {
+exports.inserir = async function(req, res) {
   var novoLancamento = new LancamentoCaixa(req.body);
-  novoLancamento.save(function(err, lancamento) {
-    if (err)
-      return res.status(440).json(err);
+  try {
+    const lancamento = await novoLancamento.save();
     return res.json(lancamento);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.consultar = function(req, res) {
-  LancamentoCaixa.findById(req.params.lancamentoCaixaId, function(err, lancamento) {
-    if (err)
-      return res.status(440).json(err);
+exports.consultar = async function(req, res) {
+  try {
+    const lancamento = await LancamentoCaixa.findById(req.params.lancamentoCaixaId);
     return res.json(lancamento);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.alterar = function(req, res) {
-  LancamentoCaixa.findOneAndUpdate({_id: req.params.lancamentoCaixaId}, req.body, {new: true}, function(err, lancamento) {
-    if (err)
-      return res.status(440).json(err);
+exports.alterar = async function(req, res) {
+  try {
+    const lancamento = await LancamentoCaixa.findOneAndUpdate({_id: req.params.lancamentoCaixaId}, req.body, {new: true});
     return res.json(lancamento);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.excluir = function(req, res) {
-  LancamentoCaixa.remove({
-    _id: req.params.lancamentoCaixaId
-  }, function(err, task) {
-    if (err)
-      return res.status(440).json(err);
+exports.excluir = async function(req, res) {
+  try {
+    const lancamento = await LancamentoCaixa.remove({
+      _id: req.params.lancamentoCaixaId
+    });
+
     return res.json({ message: 'Lançamento excluído' });
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.saldo = function(req, res) {
-  LancamentoCaixa.find({}, function(err, lancamentos) {
+exports.saldo = async function(req, res) {
+  try {
+    const lancamentos = await LancamentoCaixa.find({});
     var saldo = 0;
 
     lancamentos.forEach(function (lancamento){
@@ -54,5 +61,7 @@ exports.saldo = function(req, res) {
     });
 
     return res.json(saldo);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };

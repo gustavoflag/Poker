@@ -6,18 +6,18 @@ Jogador = mongoose.model('Jogador');
 Jogo = mongoose.model('Jogo');
 ClassificacaoEtapa = mongoose.model('ClassificacaoEtapa');
 
-exports.listar = function(req, res) {
-  Jogador.find({}, function(err, jogadores) {
-    if (err)
-      return res.status(440).json(err);
+exports.listar = async function(req, res) {
+  try {
+    const jogadores = await Jogador.find({});
     return res.json(jogadores.sort(sortBy('nome')));
-  });
+  } catch(err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.exportar = function(req, res){
-  Jogador.find({}, function(err, jogadores) {
-    if (err)
-      return res.status(440).json(err);
+exports.exportar = async function(req, res){
+  try{
+    var jogadores = Jogador.find({});
 
     var jogadoresExport = [Jogador];
 
@@ -32,41 +32,45 @@ exports.exportar = function(req, res){
     });
 
     return res.json(jogadoresExport.sort(sortBy('nome')));
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.classificacao = function(req, res) {
+exports.classificacao = async function(req, res) {
   var ordem = req.params.ordem;
 
   if (!ordem)
     ordem = "P";
 
-  classificacaoGeral(ordem, function(err, jogadores){
-    if (err)
-      return res.status(440).json(err);
+  try{
+    var jogadores = await classificacaoGeral(ordem);
 
-    var i = 1;
-
-    jogadores.forEach(jogador => {
-      jogador.classificacao = i;
-      i++;
-    });
+    jogadores.map((jogador, index) => jogador.classificacao = index + 1);
 
     return res.json(jogadores);
-  });
+  } catch(err){
+    return res.status(440).json(err);
+  }
 };
 
-exports.classificacaoRookies = function(req, res) {
+exports.classificacaoRookies = async function(req, res) {
   var ordem = req.params.ordem;
 
   if (!ordem)
     ordem = "P";
 
-  classificacaoGeral(ordem, function(err, jogadores){
-    if (err)
-      return res.status(440).json(err);
-    return res.json(jogadores.filter((j) => j.rookie === true));
-  });
+  try{
+    var jogadores = await classificacaoGeral(ordem);
+
+    var rookies = jogadores.filter((j) => j.rookie === true);
+
+    rookies.map((jogador, index) => jogador.classificacao = index + 1);
+
+    return res.json(rookies);
+  } catch(err){
+    return res.status(440).json(err);
+  }
 };
 
 exports.classificacaoMes = function(req, res){
@@ -262,54 +266,50 @@ exports.inserirLote = function(req, res){
   });
 };
 
-exports.consultar = function(req, res) {
-  Jogador.findById(req.params.jogadorId, function(err, jogador) {
-    if (err)
-      return res.status(440).json(err);
+exports.consultar = async function(req, res) {
+  try{
+    var jogador = await Jogador.findById(req.params.jogadorId);
 
-    classificacaoGeral("P", function(err, jogadores){
-      if (err)
-        return res.status(440).json(err);
+    getEstatisticasJogador(jogador);
 
-      getEstatisticasJogador(jogador);
+    var jogadores = await classificacaoGeral("P");
 
-      //posicões relativas ao ranking
-      jogador.posicaoRanking = encontraPosicao(jogadores, jogador.nome);
-      jogador.posicaoVitorias = encontraPosicao(jogadores.sort(jogadorOrders.compararVitorias), jogador.nome);
-      jogador.posicaoHU = encontraPosicao(jogadores.sort(jogadorOrders.compararHUs), jogador.nome);
-      jogador.posicaoPontuacoes = encontraPosicao(jogadores.sort(jogadorOrders.compararPontuacoes), jogador.nome);
-      jogador.posicaoPontosPorJogo = encontraPosicao(jogadores.sort(jogadorOrders.compararPontosPorJogo), jogador.nome);
-      jogador.posicaoMediaPosicao = encontraPosicao(jogadores.sort(jogadorOrders.compararMediaPosicao), jogador.nome);
+    jogadores.map(j => getEstatisticasJogador(j));
 
-      Jogo.find({ participantes: {$elemMatch: { nomeJogador: jogador.nome, lugar: 1 }}}, function(err, jogos){
-        if (err)
-          return res.status(440).json(err);
+    jogador.posicaoRanking = encontraPosicao(jogadores, jogador.nome);
+    jogador.posicaoVitorias = encontraPosicao(sortJogadores(jogadores, "V"), jogador.nome);
+    jogador.posicaoHU = encontraPosicao(sortJogadores(jogadores, "HU"), jogador.nome);
+    jogador.posicaoPontuacoes = encontraPosicao(sortJogadores(jogadores, "PO"), jogador.nome);
+    jogador.posicaoPontosPorJogo = encontraPosicao(sortJogadores(jogadores, "PPJ"), jogador.nome);
+    jogador.posicaoMediaPosicao = encontraPosicao(sortJogadores(jogadores, "MP"), jogador.nome);
 
-        jogos.forEach((jogo) => {
-          var resumoJogo = {
-            _id: jogo._id,
-            data: jogo.data
-          };
+    var jogos = await Jogo.find({ participantes: {$elemMatch: { nomeJogador: jogador.nome, lugar: 1 }}});
 
-          jogador.vitorias.push(resumoJogo);
-        });
-
-        return res.json(jogador);
-      });
+    jogos.forEach((jogo) => {
+      var resumoJogo = {
+        _id: jogo._id,
+        data: jogo.data
+      };
+  
+      jogador.vitorias.push(resumoJogo);
     });
-  });
-};
-
-exports.consultarPorNome = function(req, res) {
-  Jogador.findOne({nome: req.params.nomeJogador}, function(err, jogador) {
-    if (err)
-      return res.status(440).json(err);
-
-    if (jogador)
-      getEstatisticasJogador(jogador);
 
     return res.json(jogador);
-  });
+
+  } catch (err) {
+    console.log('error - consultar:', err);
+    return res.status(440).json(err);
+  }
+};
+
+exports.consultarPorNome = async function(req, res) {
+  try{
+    var jogador = await Jogador.findOne({nome: req.params.nomeJogador});
+
+    getEstatisticasJogador(jogador);
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
 exports.alterar = function(req, res) {
@@ -471,35 +471,38 @@ function gerarClassificacaoEtapa(etapa, callback){
   });
 };
 
-function classificacaoGeral(ordem, callback){
-  Jogador.find({}, function(err, jogadores) {
-    if (err)
-      callback(err, null);
+async function classificacaoGeral(ordem){
+  const jogadores = await Jogador.find({ jogos: { $gte: 1 } }).lean();
 
-    jogadores.forEach(jogador => getEstatisticasJogador(jogador));
+  return sortJogadores(jogadores, ordem);
+};
 
+function sortJogadores(jogadores, ordem){
+  try{
     switch(ordem){
       case "P":
-        callback(null, jogadores.sort(jogadorOrders.compararJogadores));
-        break;
+        return jogadores.sort(jogadorOrders.compararJogadores);
       case "V":
-        callback(null, jogadores.sort(jogadorOrders.compararVitorias));
-        break;
+        return jogadores.sort(jogadorOrders.compararVitorias);
       case "PPJ":
-        callback(null, jogadores.sort(jogadorOrders.compararPontosPorJogo));
-        break;
+        return jogadores.sort(jogadorOrders.compararPontosPorJogo);
       case "VR":
-        callback(null, jogadores.sort(jogadorOrders.compararValorRecebido));
-        break;
+        return jogadores.sort(jogadorOrders.compararValorRecebido);
       case "S":
-        callback(null, jogadores.sort(jogadorOrders.compararSaldo));
-        break;
+        return jogadores.sort(jogadorOrders.compararSaldo);
       case "D":
-        callback(null, jogadores.filter(jog => jog.socio).sort(jogadorOrders.compararVezesDealer));
-        break;
+        return jogadores.filter(jog => jog.socio).sort(jogadorOrders.compararVezesDealer);
+      case "PO": 
+        return jogadores.sort(jogadorOrders.compararPontuacoes);
+      case "MP":
+        return jogadores.sort(jogadorOrders.compararMediaPosicao);
+      case "HU":
+        return jogadores.sort(jogadorOrders.compararHUs);
     }
-
-  });
+  } catch(err){
+    console.log('erro sortJogadores: ', err);
+    throw(err);
+  }
 };
 
 function getEstatisticasJogador(jogador){
@@ -542,8 +545,12 @@ function compararEtapas(a, b){
   }
 };
 
-function encontraPosicao(jogadores, nomeJogador){
-  return (jogadores.findIndex(j => j.nome == nomeJogador) + 1);
+function encontraPosicao(jogadorArray, nomeJogador){
+  if (!Array.isArray(jogadorArray)){
+    return undefined;
+  }
+
+  return (jogadorArray.findIndex(j => j.nome == nomeJogador) + 1);
 };
 
 function nomeMes(indice, callback){

@@ -7,9 +7,19 @@ exports.compararPontos = function(a, b){
 }
 
 exports.compararVitorias = function(a, b){
-  var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
-  if (diffVitorias != 0){
-    return diffVitorias * -1;
+  if (a.qtdVitorias && b.qtdVitorias){
+    var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
+    if (diffVitorias != 0){
+      return diffVitorias * -1;
+    }
+  } else {
+    qtdVitoriasA = a.historicoJogos.find(j => j.lugar == 1).quantidade;
+    qtdVitoriasB = b.historicoJogos.find(j => j.lugar == 1).quantidade;
+
+    var diffVitorias = (qtdVitoriasA - qtdVitoriasB);
+    if (diffVitorias != 0){
+      return diffVitorias * -1;
+    }
   }
 
   var diffPontos = (a.pontos - b.pontos);
