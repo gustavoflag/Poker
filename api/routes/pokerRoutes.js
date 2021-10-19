@@ -9,6 +9,7 @@ module.exports = function(app) {
   var lancamentoCaixaController = require('../controllers/lancamentoCaixaController.js');
   var preJogoController = require('../controllers/preJogoController.js');
   var replayerController = require('../controllers/replayerController.js');
+  var relogioController = require('../controllers/relogioController.js');
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
@@ -142,4 +143,25 @@ module.exports = function(app) {
   app.route('/replayer')
     .post(replayerController.postHands);
 
+  app.route('/estruturaRelogio')
+    .get(relogioController.consultar)
+    //.put(usuarioController.loginRequerido, relogioController.alterar);
+    .put(relogioController.alterar);
+
+  app.route('/relogio')
+    .get(relogioController.getRelogio)
+    //.post(usuarioController.loginRequerido, relogioController.iniciar)
+    .post(relogioController.iniciar)
+    //.put(usuarioController.loginRequerido, relogioController.parar)
+    .put(relogioController.parar)
+    //.delete(usuarioController.loginRequerido, relogioController.reiniciar);
+    .delete(relogioController.reiniciar);
+
+  app.route('/relogio/voltar')
+    //.patch(usuarioController.loginRequerido, relogioController.voltar);
+    .patch(relogioController.voltar);
+
+  app.route('/relogio/avancar')
+    //.patch(usuarioController.loginRequerido, relogioController.avancar);
+    .patch(relogioController.avancar);
 };

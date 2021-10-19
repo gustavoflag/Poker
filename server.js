@@ -9,12 +9,13 @@ const mongoose = require('mongoose'),
   Premiacao = require('./api/models/premiacao'),
   Jogador = require('./api/models/jogador'),
   Jogo = require('./api/models/jogo'),
-  jsonwebtoken = require("jsonwebtoken"),
   Usuario = require('./api/models/usuario'),
   Parametro = require('./api/models/parametro'),
   LancamentoCaixa = require('./api/models/lancamentoCaixa'),
   PreJogo = require('./api/models/preJogo'),
   ClassificacaoEtapa = require('./api/models/classificacaoEtapa'),
+  Relogio = require('./api/models/relogio'),
+  jsonwebtoken = require("jsonwebtoken"),
   bodyParser = require('body-parser');
 
 const multer = require('multer');
@@ -57,7 +58,6 @@ module.exports.handler = serverless(app);
 
 
 /*LOCAL*/
-
 // routes(app);
 // app.listen(port);
 // console.log('API iniciada, porta: ' + port);

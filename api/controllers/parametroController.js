@@ -1,31 +1,30 @@
 var mongoose = require('mongoose'),
 Parametro = mongoose.model('Parametro');
 
-exports.consultar = function(req, res) {
-  Parametro.findOne({ }, function(err, parametro) {
-    if (err)
-      return res.status(440).json(err);
+exports.consultar = async function(req, res) {
+  try {
+    const parametro = await Parametro.findOne({ });
     return res.json(parametro);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.alterar = function(req, res) {
-  Parametro.findOne({ }, function(err, parametro) {
+exports.alterar = async function(req, res) {
+  try {
+    var parametro = await Parametro.findOne({ });
+
     if (parametro){
-      Parametro.findOneAndUpdate({ }, req.body, {new: true}, function(err, parametro) {
-        if (err)
-          return res.status(440).json(err);
-        return res.json(parametro);
-      });
+      parametro = await Parametro.findOneAndUpdate({ }, req.body, {new: true});
+      return res.json(parametro);
     } else {
       var novoParametro = new Parametro(req.body);
-      novoParametro.save(function(err, parametro) {
-        if (err)
-          return res.status(440).json(err);
-        return res.json(parametro);
-      });
+      await novoParametro.save();
+      return res.json(novoParametro);
     }
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
 exports.tema = function(req, res) {

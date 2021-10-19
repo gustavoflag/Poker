@@ -2,45 +2,51 @@ var sortBy = require('sort-by');
 var mongoose = require('mongoose'),
 Pontuacao = mongoose.model('Pontuacao');
 
-exports.listar = function(req, res) {
-  Pontuacao.find({}, function(err, pontuacoes) {
-    if (err)
-      return res.status(440).json(err);
+exports.listar = async function(req, res) {
+  try {
+    const pontuacoes = await Pontuacao.find({});
     return res.json(pontuacoes.sort(sortBy('lugar')));
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.inserir = function(req, res) {
-  var novaPontuacao = new Pontuacao(req.body);
-  novaPontuacao.save(function(err, pontuacao) {
-    if (err)
-      return res.status(440).json(err);
+exports.inserir = async function(req, res) {
+  try {
+    var novaPontuacao = new Pontuacao(req.body);
+    const pontuacao = await novaPontuacao.save();
     return res.json(pontuacao);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.consultar = function(req, res) {
-  Pontuacao.findById(req.params.pontuacaoId, function(err, pontuacao) {
-    if (err)
-      return res.status(440).json(err);
+exports.consultar = async function(req, res) {
+  try {
+    const pontuacao = await Pontuacao.findById(req.params.pontuacaoId);
     return res.json(pontuacao);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.alterar = function(req, res) {
-  Pontuacao.findOneAndUpdate({_id: req.params.pontuacaoId}, req.body, {new: true}, function(err, pontuacao) {
-    if (err)
-      return res.status(440).json(err);
+exports.alterar = async function(req, res) {
+  try {
+    const pontuacao = await Pontuacao.findOneAndUpdate({_id: req.params.pontuacaoId}, req.body, {new: true});
     return res.json(pontuacao);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.excluir = function(req, res) {
-  Pontuacao.remove({
-    _id: req.params.pontuacaoId
-  }, function(err, task) {
-    if (err)
-      return res.status(440).json(err);
+exports.excluir = async function(req, res) {
+  try {
+    await Pontuacao.remove({
+      _id: req.params.pontuacaoId
+    });
+
     return res.json({ message: 'Pontuação excluída' });
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
