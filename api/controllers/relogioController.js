@@ -71,7 +71,7 @@ exports.parar = function(req, res){
     return res.json({ status: 'PARADO', inicio: null, segundos: segundos });
 }
 
-exports.reiniciar = function(req, res){
+exports.reiniciar = async function(req, res){
     var relogio = await Relogio.findOne({ });
     if (relogio){
         estrutura = relogio.estrutura;
