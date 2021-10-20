@@ -68,7 +68,7 @@ exports.iniciar = async function(req, res){
     return res.json({ status: 'INICIADO', inicio: inicioRelogio, segundos: segundos });
 }
 
-exports.parar = function(req, res){
+exports.parar = async function(req, res){
     if (inicioRelogio){
         var agora = Math.floor(Date.now() / 1000);
         var span_secs = (agora - inicioRelogio);
@@ -102,21 +102,21 @@ exports.reiniciar = async function(req, res){
     return res.json({ status: 'PARADO', inicio: inicioRelogio, segundos: segundos });
 }
 
-exports.voltar = function(req, res){
+exports.voltar = async function(req, res){
     var relogioAtual = getRelogioAtual();
     var nivelAtual = getNivel(relogioAtual.segundos);
     if (nivelAtual){
         if (inicioRelogio){
             inicioRelogio = Math.floor(Date.now() / 1000);
         }
-        
+
         segundos = nivelAtual.segsInicio;
     }
 
     return res.json({ status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos });
 }
 
-exports.avancar = function(req, res){
+exports.avancar = async function(req, res){
     var relogioAtual = getRelogioAtual();
     var nivelAtual = getNivel(relogioAtual.segundos);
     if (nivelAtual){
