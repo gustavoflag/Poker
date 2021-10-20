@@ -30,6 +30,12 @@ var RelogioSchema = new Schema({
             msg: {
                 type: String
             },
+            segsInicio: {
+                type: Number
+            },
+            segsFim: {
+                type: Number
+            }
         }],
         required: true
     },

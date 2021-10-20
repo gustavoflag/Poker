@@ -3,11 +3,12 @@ Relogio = mongoose.model('Relogio');
 
 var inicioRelogio = null;
 var segundos = 0;
-var estrutura;
+var estrutura = null;
 
 exports.consultar = async function(req, res) {
     try {
         const relogio = await Relogio.findOne({ });
+
         return res.json(relogio);
     } catch (err) {
         return res.status(440).json(err);
@@ -17,6 +18,13 @@ exports.consultar = async function(req, res) {
 exports.alterar = async function(req, res) {
     try {
         var relogio = await Relogio.findOne({ });
+
+        segsInicio = 0;
+        req.body.estrutura.forEach(nivel => {
+            nivel.segsInicio = (segsInicio > 0 ? segsInicio + 1 : segsInicio);
+            nivel.segsFim = segsInicio + nivel.segs;
+            segsInicio = nivel.segsFim;
+        });
 
         if (relogio){
             relogio = await Relogio.findOneAndUpdate({ }, req.body, {new: true});
@@ -79,6 +87,16 @@ exports.reiniciar = async function(req, res){
         return res.status(440).json({ message: 'Estrutura do relógio não encontrada' });
     }
 
+    if (!estrutura[0].segsInicio){
+        segsInicio = 0;
+
+        estrutura.forEach(nivel => {
+            nivel.segsInicio = segsInicio + 1;
+            nivel.segsFim = segsInicio + nivel.segs;
+            segsInicio = nivel.segsFim;
+        });
+    }
+
     inicioRelogio = null;
     segundos = 0;
     return res.json({ status: 'PARADO', inicio: inicioRelogio, segundos: segundos });
@@ -86,9 +104,13 @@ exports.reiniciar = async function(req, res){
 
 exports.voltar = function(req, res){
     var relogioAtual = getRelogioAtual();
-    if (relogioAtual.nivel){
-        inicioRelogio = Math.floor(Date.now() / 1000);
-        segundos = relogioAtual.nivel.segsInicio;
+    var nivelAtual = getNivel(relogioAtual.segundos);
+    if (nivelAtual){
+        if (inicioRelogio){
+            inicioRelogio = Math.floor(Date.now() / 1000);
+        }
+        
+        segundos = nivelAtual.segsInicio;
     }
 
     return res.json({ status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos });
@@ -96,9 +118,13 @@ exports.voltar = function(req, res){
 
 exports.avancar = function(req, res){
     var relogioAtual = getRelogioAtual();
-    if (relogioAtual.nivel){
-        inicioRelogio = Math.floor(Date.now() / 1000);
-        segundos = relogioAtual.nivel.segsFim + 1;
+    var nivelAtual = getNivel(relogioAtual.segundos);
+    if (nivelAtual){
+        if (inicioRelogio){
+            inicioRelogio = Math.floor(Date.now() / 1000);
+        }
+        
+        segundos = nivelAtual.segsFim + 1;
     }
 
     return res.json({ status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos });
@@ -126,10 +152,8 @@ function getNivel(segs){
 }
 
 function getRelogioAtual(){
-    var nivelAtual;
     var secsAtual;
-    var curr_secs;
-    var elapsed_secs;
+
     if (inicioRelogio){
         var agora = Math.floor(Date.now() / 1000);
         var span_secs = (agora - inicioRelogio);
@@ -139,21 +163,31 @@ function getRelogioAtual(){
         secsAtual = segundos;
     } 
 
-    nivelAtual = getNivel(secsAtual);
-    if (nivelAtual){
-        elapsed_secs = (secsAtual - nivelAtual.segsInicio + 1);
-
-        curr_secs = nivelAtual.segs - elapsed_secs;
-
-        return { nivel: nivelAtual, secs: curr_secs, secs_pass: elapsed_secs };
-    } else {
-        if (inicioRelogio){
-            return { msg: "Relógio encerrado" };
-        } else {
-            inicioRelogio = null;
-            segundos = 0;
-            return { status: 'PARADO', inicio: inicioRelogio, segundos: segundos };
-        }
-        
-    }
+    return { status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: secsAtual };
 }
+
+// function getRelogioAtual(){
+//     var nivelAtual;
+//     var secsAtual;
+//     var curr_secs;
+//     var elapsed_secs;
+//     if (inicioRelogio){
+//         var agora = Math.floor(Date.now() / 1000);
+//         var span_secs = (agora - inicioRelogio);
+
+//         secsAtual = span_secs + segundos;
+//     } else {
+//         secsAtual = segundos;
+//     } 
+
+//     nivelAtual = getNivel(secsAtual);
+//     if (nivelAtual){
+//         elapsed_secs = (secsAtual - nivelAtual.segsInicio + 1);
+
+//         curr_secs = nivelAtual.segs - elapsed_secs;
+
+//         return { status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos, nivel: nivelAtual, secs: curr_secs, secs_pass: elapsed_secs };
+//     } else {
+//         return { status: (inicioRelogio ? 'ENCERRADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos };
+//     }
+// }
