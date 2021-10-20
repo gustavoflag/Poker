@@ -41,27 +41,8 @@ exports.alterar = async function(req, res) {
 };
 
 exports.iniciar = async function(req, res){
-    if (!inicioRelogio){
-
-        if (!estrutura){
-            var relogio = await Relogio.findOne({ });
-            if (relogio){
-                estrutura = relogio.estrutura;
-            } else {
-                return res.status(440).json({ message: 'Estrutura do relógio não encontrada' });
-            }
-        }
-
-        if (!estrutura[0].segsInicio){
-            segsInicio = 0;
-
-            estrutura.forEach(nivel => {
-                nivel.segsInicio = segsInicio + 1;
-                nivel.segsFim = segsInicio + nivel.segs;
-                segsInicio = nivel.segsFim;
-            });
-        }
-
+    if (!inicioRelogio)
+    {
         inicioRelogio = Math.floor(Date.now() / 1000);
     } 
 
@@ -80,23 +61,6 @@ exports.parar = async function(req, res){
 }
 
 exports.reiniciar = async function(req, res){
-    var relogio = await Relogio.findOne({ });
-    if (relogio){
-        estrutura = relogio.estrutura;
-    } else {
-        return res.status(440).json({ message: 'Estrutura do relógio não encontrada' });
-    }
-
-    if (!estrutura[0].segsInicio){
-        segsInicio = 0;
-
-        estrutura.forEach(nivel => {
-            nivel.segsInicio = segsInicio + 1;
-            nivel.segsFim = segsInicio + nivel.segs;
-            segsInicio = nivel.segsFim;
-        });
-    }
-
     inicioRelogio = null;
     segundos = 0;
     return res.json({ status: 'PARADO', inicio: inicioRelogio, segundos: segundos });
