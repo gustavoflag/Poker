@@ -15,6 +15,7 @@ const mongoose = require('mongoose'),
   PreJogo = require('./api/models/preJogo'),
   ClassificacaoEtapa = require('./api/models/classificacaoEtapa'),
   Relogio = require('./api/models/relogio'),
+  EstruturaRelogio = require('./api/models/estruturaRelogio'),
   jsonwebtoken = require("jsonwebtoken"),
   bodyParser = require('body-parser');
 

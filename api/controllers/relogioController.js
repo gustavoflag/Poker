@@ -1,13 +1,9 @@
 var mongoose = require('mongoose'),
 Relogio = mongoose.model('Relogio');
 
-var inicioRelogio = null;
-var segundos = 0;
-var estrutura = null;
-
 exports.consultar = async function(req, res) {
     try {
-        const relogio = await Relogio.findOne({ });
+        var relogio = await Relogio.findOne({ }).lean();
 
         return res.json(relogio);
     } catch (err) {
@@ -15,143 +11,121 @@ exports.consultar = async function(req, res) {
     }
 };
 
-exports.alterar = async function(req, res) {
+exports.iniciar = async function(req, res){
     try {
         var relogio = await Relogio.findOne({ });
 
-        segsInicio = 0;
-        req.body.estrutura.forEach(nivel => {
-            nivel.segsInicio = (segsInicio > 0 ? segsInicio + 1 : segsInicio);
-            nivel.segsFim = segsInicio + nivel.segs;
-            segsInicio = nivel.segsFim;
-        });
-
         if (relogio){
-            relogio = await Relogio.findOneAndUpdate({ }, req.body, {new: true});
+            var body = {
+                inicioRelogio: Math.floor(Date.now() / 1000),
+                segundos: relogio.segundos,
+                status: "INICIADO"
+            };
+
+            relogio = await Relogio.findOneAndUpdate({ }, body, {new: true});
             return res.json(relogio);
         } else {
-            var novoRelogio = new Relogio(req.body);
+            var body = {
+                inicioRelogio: Math.floor(Date.now() / 1000),
+                segundos: 0,
+                status: "INICIADO"
+            };
+
+            var novoRelogio = new Relogio(body);
             await novoRelogio.save();
             return res.json(novoRelogio);
         }
     } catch (err) {
-        console.log('err', err)
         return res.status(440).json(err);
     }
-};
-
-exports.iniciar = async function(req, res){
-    if (!inicioRelogio)
-    {
-        inicioRelogio = Math.floor(Date.now() / 1000);
-    } 
-
-    return res.json({ status: 'INICIADO', inicio: inicioRelogio, segundos: segundos });
 }
 
 exports.parar = async function(req, res){
-    if (inicioRelogio){
-        var agora = Math.floor(Date.now() / 1000);
-        var span_secs = (agora - inicioRelogio);
-        inicioRelogio = null;
-        segundos += span_secs;
-    }
+    try {
+        var relogio = await Relogio.findOne({ });
+        if (relogio && relogio.inicioRelogio){
+            var agora = Math.floor(Date.now() / 1000);
+            var span_secs = (agora - relogio.inicioRelogio);
 
-    return res.json({ status: 'PARADO', inicio: null, segundos: segundos });
+            var body = {
+                inicioRelogio: null,
+                segundos: relogio.segundos + span_secs,
+                status: "PARADO"
+            };
+
+            relogio = await Relogio.findOneAndUpdate({ }, body, {new: true});
+            return res.json(relogio);
+        } else {
+            return res.status(440).json({ message: 'Relógio não encontrado ou não iniciado' });
+        }
+    } catch (err) {
+        return res.status(440).json(err);
+    }
 }
 
 exports.reiniciar = async function(req, res){
-    inicioRelogio = null;
-    segundos = 0;
-    return res.json({ status: 'PARADO', inicio: inicioRelogio, segundos: segundos });
+    try {
+        var relogio = await Relogio.findOne({ });
+
+        var body = {
+            inicioRelogio: null,
+            segundos: 0,
+            status: "PARADO"
+        };
+
+        if (relogio){
+            relogio = await Relogio.findOneAndUpdate({ }, body, {new: true});
+            return res.json(relogio);
+        } else {
+            var novoRelogio = new Relogio(body);
+            await novoRelogio.save();
+            return res.json(novoRelogio);
+        }
+    } catch (err) {
+        return res.status(440).json(err);
+    }
 }
 
 exports.voltar = async function(req, res){
-    var relogioAtual = getRelogioAtual();
-    var nivelAtual = getNivel(relogioAtual.segundos);
-    if (nivelAtual){
-        if (inicioRelogio){
-            inicioRelogio = Math.floor(Date.now() / 1000);
+    try {
+        var relogio = await Relogio.findOne({ });
+        if (relogio){
+            var agora = Math.floor(Date.now() / 1000);
+
+            var body = {
+                inicioRelogio: (relogio.inicioRelogio ? agora : null),
+                segundos: req.body.nivelBlind.segsInicio,
+                status: relogio.status
+            };
+
+            relogio = await Relogio.findOneAndUpdate({ }, body, {new: true});
+            return res.json(relogio);
+        } else {
+            return res.status(440).json({ message: 'Relógio não encontrado' });
         }
-
-        segundos = nivelAtual.segsInicio;
+    } catch (err) {
+        return res.status(440).json(err);
     }
-
-    return res.json({ status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos });
 }
 
 exports.avancar = async function(req, res){
-    var relogioAtual = getRelogioAtual();
-    var nivelAtual = getNivel(relogioAtual.segundos);
-    if (nivelAtual){
-        if (inicioRelogio){
-            inicioRelogio = Math.floor(Date.now() / 1000);
+    try {
+        var relogio = await Relogio.findOne({ });
+        if (relogio){
+            var agora = Math.floor(Date.now() / 1000);
+
+            var body = {
+                inicioRelogio: (relogio.inicioRelogio ? agora : null),
+                segundos: req.body.nivelBlind.segsFim + 1,
+                status: relogio.status
+            };
+
+            relogio = await Relogio.findOneAndUpdate({ }, body, {new: true});
+            return res.json(relogio);
+        } else {
+            return res.status(440).json({ message: 'Relógio não encontrado' });
         }
-        
-        segundos = nivelAtual.segsFim + 1;
+    } catch (err) {
+        return res.status(440).json(err);
     }
-
-    return res.json({ status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos });
 }
-
-exports.getRelogio = function(req, res){
-    return res.json(getRelogioAtual());
-}
-
-function getNivel(segs){
-    let nivelAtual;
-
-    if (estrutura){
-        estrutura.every(nivel => {
-            if (nivel.segsFim < segs){
-                return true;
-            } else {
-                nivelAtual = nivel;
-                return false
-            }
-        });
-    }
-
-    return nivelAtual;
-}
-
-function getRelogioAtual(){
-    var secsAtual;
-
-    if (inicioRelogio){
-        var agora = Math.floor(Date.now() / 1000);
-        var span_secs = (agora - inicioRelogio);
-
-        secsAtual = span_secs + segundos;
-    } else {
-        secsAtual = segundos;
-    } 
-
-    return { status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: secsAtual };
-}
-
-// function getRelogioAtual(){
-//     var nivelAtual;
-//     var secsAtual;
-//     var curr_secs;
-//     var elapsed_secs;
-//     if (inicioRelogio){
-//         var agora = Math.floor(Date.now() / 1000);
-//         var span_secs = (agora - inicioRelogio);
-
-//         secsAtual = span_secs + segundos;
-//     } else {
-//         secsAtual = segundos;
-//     } 
-
-//     nivelAtual = getNivel(secsAtual);
-//     if (nivelAtual){
-//         elapsed_secs = (secsAtual - nivelAtual.segsInicio + 1);
-
-//         curr_secs = nivelAtual.segs - elapsed_secs;
-
-//         return { status: (inicioRelogio ? 'INICIADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos, nivel: nivelAtual, secs: curr_secs, secs_pass: elapsed_secs };
-//     } else {
-//         return { status: (inicioRelogio ? 'ENCERRADO' : 'PARADO'), inicio: inicioRelogio, segundos: segundos };
-//     }
-// }

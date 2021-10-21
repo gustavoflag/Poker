@@ -10,35 +10,9 @@ var RelogioSchema = new Schema({
     segundos: {
         type: Number
     },
-    estrutura: {
-        type: [{
-            nivel:{
-                type: Number
-            },
-            segs:{
-                type: Number
-            },
-            sb:{
-                type: Number
-            },
-            bb: {
-                type: Number
-            },
-            ante: {
-                type: Number
-            },
-            msg: {
-                type: String
-            },
-            segsInicio: {
-                type: Number
-            },
-            segsFim: {
-                type: Number
-            }
-        }],
-        required: true
-    },
+    status: {
+        type: String
+    }
 });
 
 module.exports = mongoose.model('Relogio', RelogioSchema);

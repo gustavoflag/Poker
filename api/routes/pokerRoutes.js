@@ -10,6 +10,7 @@ module.exports = function(app) {
   var preJogoController = require('../controllers/preJogoController.js');
   var replayerController = require('../controllers/replayerController.js');
   var relogioController = require('../controllers/relogioController.js');
+  var estruturaRelogioController = require('../controllers/estruturaRelogioController.js');
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
@@ -144,12 +145,12 @@ module.exports = function(app) {
     .post(replayerController.postHands);
 
   app.route('/estruturaRelogio')
-    .get(relogioController.consultar)
+    .get(estruturaRelogioController.listar)
     //.put(usuarioController.loginRequerido, relogioController.alterar);
-    .put(relogioController.alterar);
+    .put(estruturaRelogioController.alteraTodos);
 
   app.route('/relogio')
-    .get(relogioController.getRelogio)
+    .get(relogioController.consultar)
     //.post(usuarioController.loginRequerido, relogioController.iniciar)
     .post(relogioController.iniciar)
     //.put(usuarioController.loginRequerido, relogioController.parar)
