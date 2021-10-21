@@ -160,7 +160,9 @@ module.exports = function(app) {
 
   app.route('/relogio/voltar')
     //.patch(usuarioController.loginRequerido, relogioController.voltar);
-    .patch(relogioController.voltar);
+    .patch(relogioController.reiniciarBlind)
+    //.put(usuarioController.loginRequerido, relogioController.voltar);
+    .put(relogioController.voltarBlind);
 
   app.route('/relogio/avancar')
     //.patch(usuarioController.loginRequerido, relogioController.avancar);
