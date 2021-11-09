@@ -8,9 +8,6 @@ module.exports = function(app) {
   var parametroController = require('../controllers/parametroController.js');
   var lancamentoCaixaController = require('../controllers/lancamentoCaixaController.js');
   var preJogoController = require('../controllers/preJogoController.js');
-  var replayerController = require('../controllers/replayerController.js');
-  var relogioController = require('../controllers/relogioController.js');
-  var estruturaRelogioController = require('../controllers/estruturaRelogioController.js');
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
@@ -140,31 +137,4 @@ module.exports = function(app) {
 
   app.route('/preJogo/excluirJogador')
     .post(usuarioController.loginRequerido, preJogoController.excluirJogador);
-
-  app.route('/replayer')
-    .post(replayerController.postHands);
-
-  app.route('/estruturaRelogio')
-    .get(estruturaRelogioController.listar)
-    //.put(usuarioController.loginRequerido, relogioController.alterar);
-    .put(estruturaRelogioController.alteraTodos);
-
-  app.route('/relogio')
-    .get(relogioController.consultar)
-    //.post(usuarioController.loginRequerido, relogioController.iniciar)
-    .post(relogioController.iniciar)
-    //.put(usuarioController.loginRequerido, relogioController.parar)
-    .put(relogioController.parar)
-    //.delete(usuarioController.loginRequerido, relogioController.reiniciar);
-    .delete(relogioController.reiniciar);
-
-  app.route('/relogio/voltar')
-    //.patch(usuarioController.loginRequerido, relogioController.voltar);
-    .patch(relogioController.reiniciarBlind)
-    //.put(usuarioController.loginRequerido, relogioController.voltar);
-    .put(relogioController.voltarBlind);
-
-  app.route('/relogio/avancar')
-    //.patch(usuarioController.loginRequerido, relogioController.avancar);
-    .patch(relogioController.avancar);
 };
