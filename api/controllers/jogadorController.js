@@ -17,9 +17,9 @@ exports.listar = async function(req, res) {
 
 exports.exportar = async function(req, res){
   try{
-    var jogadores = Jogador.find({});
+    const jogadores = await Jogador.find({});
 
-    var jogadoresExport = [Jogador];
+    var jogadoresExport = [];
 
     jogadores.forEach((jogador) => {
       var jogExport = new Jogador();
