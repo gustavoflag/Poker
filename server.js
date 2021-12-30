@@ -30,10 +30,10 @@ mongoose.Promise = global.Promise;
 //mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_dvvkpq45:6a04qh41uh1tgvk0dcgl3mhl4j@cluster-dvvkpq45-shard-00-00.togo7.mongodb.net:27017,cluster-dvvkpq45-shard-00-01.togo7.mongodb.net:27017,cluster-dvvkpq45-shard-00-02.togo7.mongodb.net:27017/heroku_dvvkpq45?ssl=true&replicaSet=atlas-cl7yo6-shard-0&authSource=admin&retryWrites=true&w=majority'); //2020 - Migrado
 
 //mongodb+srv://tqsop:tqsop2021@tqsop2021.sg513.mongodb.net/tqsop?retryWrites=true&w=majority //2021 - NOVO DRIVER
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2021@tqsop2021-shard-00-00.sg513.mongodb.net:27017,tqsop2021-shard-00-01.sg513.mongodb.net:27017,tqsop2021-shard-00-02.sg513.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-14480s-shard-0&authSource=admin&retryWrites=true&w=majority'); //2021
+//mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2021@tqsop2021-shard-00-00.sg513.mongodb.net:27017,tqsop2021-shard-00-01.sg513.mongodb.net:27017,tqsop2021-shard-00-02.sg513.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-14480s-shard-0&authSource=admin&retryWrites=true&w=majority'); //2021
 
 //mongodb+srv://tqsop:tqsop2022@tqsop2022.hdcd9.mongodb.net/tqsop?retryWrites=true&w=majority //2022 - NOVO DRIVER
-//mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2022@tqsop2022-shard-00-00.hdcd9.mongodb.net:27017,tqsop2022-shard-00-01.hdcd9.mongodb.net:27017,tqsop2022-shard-00-02.hdcd9.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-11hibj-shard-0&authSource=admin&retryWrites=true&w=majority'); //2022
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2022@tqsop2022-shard-00-00.hdcd9.mongodb.net:27017,tqsop2022-shard-00-01.hdcd9.mongodb.net:27017,tqsop2022-shard-00-02.hdcd9.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-11hibj-shard-0&authSource=admin&retryWrites=true&w=majority'); //2022
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(forms.array()); 

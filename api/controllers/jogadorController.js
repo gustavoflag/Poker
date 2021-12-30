@@ -472,7 +472,14 @@ function gerarClassificacaoEtapa(etapa, callback){
 };
 
 async function classificacaoGeral(ordem){
-  const jogadores = await Jogador.find({ jogos: { $gte: 1 } }).lean();
+  const qtdJogos = await Jogo.count({});
+  var jogadores;
+
+  if (qtdJogos > 0){
+    jogadores = await Jogador.find({ jogos: { $gte: 1 } }).lean();
+  } else {
+    jogadores = await Jogador.find({}).lean();
+  }
 
   return sortJogadores(jogadores, ordem);
 };
