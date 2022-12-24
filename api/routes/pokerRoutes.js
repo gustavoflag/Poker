@@ -13,6 +13,10 @@ module.exports = function(app) {
     .get(pontuacaoController.listar)
     .post(authGuard.isAuthenticated, pontuacaoController.inserir);
 
+  app.route('/pontuacao/inserirLote')
+    //.post(pontuacaoController.inserirLote)
+    .post(authGuard.isAuthenticated, pontuacaoController.inserirLote);
+
   app.route('/pontuacao/:pontuacaoId')
     .get(pontuacaoController.consultar)
     .put(authGuard.isAuthenticated, pontuacaoController.alterar)
@@ -26,6 +30,10 @@ module.exports = function(app) {
     .get(pontuacaoController.consultar)
     .put(authGuard.isAuthenticated, premiacaoController.alterar)
     .delete(authGuard.isAuthenticated, premiacaoController.excluir);
+
+  app.route('/premiacao/inserirLote')
+    //.post(premiacaoController.inserirLote);
+    .post(authGuard.isAuthenticated, premiacaoController.inserirLote);
 
   app.route('/jogador')
     .get(jogadorController.listar)

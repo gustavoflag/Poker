@@ -19,6 +19,26 @@ exports.inserir = function(req, res) {
   });
 };
 
+exports.inserirLote = async function(req, res) {
+  var premiacoes = req.body;
+
+  var count = 0;
+  premiacoes.forEach((pontuacaoBody) => {
+    var novaPremiacao = new Premiacao(pontuacaoBody);
+
+    novaPremiacao.save(function(err, task) {
+      if (err)
+        return res.status(440).json(err);
+    });
+
+    count++;
+    if (count === premiacoes.length){
+      return res.json(premiacoes);
+    }
+  });
+};
+
+
 exports.consultar = function(req, res) {
   Premiacao.findById(req.params.premiacaoId, function(err, premiacao) {
     if (err)

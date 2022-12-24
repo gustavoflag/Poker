@@ -21,6 +21,25 @@ exports.inserir = async function(req, res) {
   }
 };
 
+exports.inserirLote = async function(req, res) {
+  var pontuacoes = req.body;
+
+  var count = 0;
+  pontuacoes.forEach((pontuacaoBody) => {
+    var novaPontuacao = new Pontuacao(pontuacaoBody);
+
+    novaPontuacao.save(function(err, task) {
+      if (err)
+        return res.status(440).json(err);
+    });
+
+    count++;
+    if (count === pontuacoes.length){
+      return res.json(pontuacoes);
+    }
+  });
+};
+
 exports.consultar = async function(req, res) {
   try {
     const pontuacao = await Pontuacao.findById(req.params.pontuacaoId);

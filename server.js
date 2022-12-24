@@ -32,7 +32,10 @@ mongoose.Promise = global.Promise;
 //mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2021@tqsop2021-shard-00-00.sg513.mongodb.net:27017,tqsop2021-shard-00-01.sg513.mongodb.net:27017,tqsop2021-shard-00-02.sg513.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-14480s-shard-0&authSource=admin&retryWrites=true&w=majority'); //2021
 
 //mongodb+srv://tqsop:tqsop2022@tqsop2022.hdcd9.mongodb.net/tqsop?retryWrites=true&w=majority //2022 - NOVO DRIVER
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2022@tqsop2022-shard-00-00.hdcd9.mongodb.net:27017,tqsop2022-shard-00-01.hdcd9.mongodb.net:27017,tqsop2022-shard-00-02.hdcd9.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-11hibj-shard-0&authSource=admin&retryWrites=true&w=majority'); //2022
+//mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2022@tqsop2022-shard-00-00.hdcd9.mongodb.net:27017,tqsop2022-shard-00-01.hdcd9.mongodb.net:27017,tqsop2022-shard-00-02.hdcd9.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-11hibj-shard-0&authSource=admin&retryWrites=true&w=majority'); //2022
+
+//mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://tqsop:tqsop2023@tqsop2023.bsp7s6t.mongodb.net/tqsop?retryWrites=true&w=majority'); //2023 - NOVO DRIVER
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://tqsop:tqsop2023@ac-p2eo9mk-shard-00-00.bsp7s6t.mongodb.net:27017,ac-p2eo9mk-shard-00-01.bsp7s6t.mongodb.net:27017,ac-p2eo9mk-shard-00-02.bsp7s6t.mongodb.net:27017/tqsop?ssl=true&replicaSet=atlas-ohq1fw-shard-0&authSource=admin&retryWrites=true&w=majority'); //2023
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(forms.array()); 
@@ -59,7 +62,6 @@ app.use(function(req, res, next) {
 routes(router);
 app.use('/.netlify/functions/server', router);
 module.exports.handler = serverless(app);
-
 
 
 /*LOCAL*/
