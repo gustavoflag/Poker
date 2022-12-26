@@ -31,6 +31,9 @@ var ParametroSchema = new Schema({
   },
   pontosExtraKO: {
     type: Number
+  },
+  valorTaxaLimpeza: {
+    type: Number
   }
 });
 

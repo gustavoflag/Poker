@@ -64,8 +64,14 @@ exports.inserir = function(req, res) {
           qtdeRebuy += novoJogo.participantes[i].rebuy;
         }
 
+        var valorTaxaLimpeza = 55;
+        if (parametro.valorTaxaLimpeza){
+          valorTaxaLimpeza = parametro.valorTaxaLimpeza;
+        }
+
         var premiacaoTotal = (novoJogo.participantes.length * parametro.valorBuyIn)
-                              + (qtdeRebuy * (parametro.valorBuyIn + parametro.valorMaleta));
+                              + (qtdeRebuy * (parametro.valorBuyIn + parametro.valorMaleta))
+                              - (valorTaxaLimpeza);
 
         if (!parametro.participantesPremiacaoTerceiro){
           parametro.participantesPremiacaoTerceiro = 9999;
@@ -211,8 +217,15 @@ exports.inserir = function(req, res) {
                   if (err)
                     return res.status(440).json(err);
 
-                  jogadorController.gerarClassificacaoEtapa(jogo.numero, function(err, classificacao){
-                    return res.json(jogo);
+                  var lctoCaixaTaxaLimpeza = new LancamentoCaixa({ data: novoJogo.data, valor: valorTaxaLimpeza, descricao: 'Taxa limpeza - data: ' + strData, idJogo: jogo._id });
+
+                  lctoCaixaTaxaLimpeza.save(function(err, lcto) {
+                    if (err)
+                      return res.status(440).json(err);
+
+                    jogadorController.gerarClassificacaoEtapa(jogo.numero, function(err, classificacao){
+                      return res.json(jogo);
+                    });
                   });
                 });
               });
