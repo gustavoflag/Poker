@@ -1,7 +1,7 @@
-var mongoose = require('mongoose'),
-Parametro = mongoose.model('Parametro');
+const mongoose = require('mongoose');
+const Parametro = mongoose.model('Parametro');
 
-exports.consultar = async function(req, res) {
+exports.consultar = async (req, res) => {
   try {
     const parametro = await Parametro.findOne({ });
     return res.json(parametro);
@@ -10,7 +10,7 @@ exports.consultar = async function(req, res) {
   }
 };
 
-exports.alterar = async function(req, res) {
+exports.alterar = async (req, res) => {
   try {
     var parametro = await Parametro.findOne({ });
 
@@ -27,6 +27,6 @@ exports.alterar = async function(req, res) {
   }
 };
 
-exports.tema = function(req, res) {
+exports.tema = (req, res) => {
   return res.json(process.env.THEME || 'slate');
 };

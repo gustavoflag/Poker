@@ -59,12 +59,12 @@ app.use(function(req, res, next) {
 });
 
 /*SERVER*/
-routes(router);
-app.use('/.netlify/functions/server', router);
-module.exports.handler = serverless(app);
+// routes(router);
+// app.use('/.netlify/functions/server', router);
+// module.exports.handler = serverless(app);
 
 
 /*LOCAL*/
-// routes(app);
-// app.listen(port);
-// console.log('API iniciada, porta: ' + port);
+routes(app);
+app.listen(port);
+console.log('API iniciada, porta: ' + port);

@@ -1,5 +1,5 @@
 'use strict';
-exports.isAuthenticated = function(req, res, next) {
+exports.isAuthenticated = (req, res, next) => {
     if (req.user && req.user.appName == 'tqsop') {
         next();
     } else {

@@ -1,8 +1,8 @@
-var sortBy = require('sort-by');
-var mongoose = require('mongoose'),
-Pontuacao = mongoose.model('Pontuacao');
+const sortBy = require('sort-by');
+const mongoose = require('mongoose');
+const Pontuacao = mongoose.model('Pontuacao');
 
-exports.listar = async function(req, res) {
+exports.listar = async (req, res) => {
   try {
     const pontuacoes = await Pontuacao.find({});
     return res.json(pontuacoes.sort(sortBy('lugar')));
@@ -11,7 +11,7 @@ exports.listar = async function(req, res) {
   }
 };
 
-exports.inserir = async function(req, res) {
+exports.inserir = async (req, res) => {
   try {
     var novaPontuacao = new Pontuacao(req.body);
     const pontuacao = await novaPontuacao.save();
@@ -21,7 +21,7 @@ exports.inserir = async function(req, res) {
   }
 };
 
-exports.inserirLote = async function(req, res) {
+exports.inserirLote = async (req, res) => {
   var pontuacoes = req.body;
 
   var count = 0;
@@ -40,7 +40,7 @@ exports.inserirLote = async function(req, res) {
   });
 };
 
-exports.consultar = async function(req, res) {
+exports.consultar = async (req, res) => {
   try {
     const pontuacao = await Pontuacao.findById(req.params.pontuacaoId);
     return res.json(pontuacao);
@@ -49,7 +49,7 @@ exports.consultar = async function(req, res) {
   }
 };
 
-exports.alterar = async function(req, res) {
+exports.alterar = async (req, res) => {
   try {
     const pontuacao = await Pontuacao.findOneAndUpdate({_id: req.params.pontuacaoId}, req.body, {new: true});
     return res.json(pontuacao);
@@ -58,7 +58,7 @@ exports.alterar = async function(req, res) {
   }
 };
 
-exports.excluir = async function(req, res) {
+exports.excluir = async (req, res) => {
   try {
     await Pontuacao.remove({
       _id: req.params.pontuacaoId

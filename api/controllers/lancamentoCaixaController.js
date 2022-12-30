@@ -1,8 +1,8 @@
-var sortBy = require('sort-by');
-var mongoose = require('mongoose'),
-LancamentoCaixa = mongoose.model('LancamentoCaixa');
+const sortBy = require('sort-by');
+const mongoose = require('mongoose');
+const LancamentoCaixa = mongoose.model('LancamentoCaixa');
 
-exports.listar = async function(req, res) {
+exports.listar = async (req, res) => {
   try {
     const lancamentos = await LancamentoCaixa.find({});
     return res.json(lancamentos.sort(sortBy('-data')));
@@ -11,9 +11,9 @@ exports.listar = async function(req, res) {
   }
 };
 
-exports.inserir = async function(req, res) {
-  var novoLancamento = new LancamentoCaixa(req.body);
+exports.inserir = async (req, res) => {
   try {
+    var novoLancamento = new LancamentoCaixa(req.body);
     const lancamento = await novoLancamento.save();
     return res.json(lancamento);
   } catch (err) {
@@ -21,7 +21,7 @@ exports.inserir = async function(req, res) {
   }
 };
 
-exports.consultar = async function(req, res) {
+exports.consultar = async (req, res) => {
   try {
     const lancamento = await LancamentoCaixa.findById(req.params.lancamentoCaixaId);
     return res.json(lancamento);
@@ -30,7 +30,7 @@ exports.consultar = async function(req, res) {
   }
 };
 
-exports.alterar = async function(req, res) {
+exports.alterar = async (req, res) => {
   try {
     const lancamento = await LancamentoCaixa.findOneAndUpdate({_id: req.params.lancamentoCaixaId}, req.body, {new: true});
     return res.json(lancamento);
@@ -39,7 +39,7 @@ exports.alterar = async function(req, res) {
   }
 };
 
-exports.excluir = async function(req, res) {
+exports.excluir = async (req, res) => {
   try {
     const lancamento = await LancamentoCaixa.remove({
       _id: req.params.lancamentoCaixaId
@@ -51,7 +51,7 @@ exports.excluir = async function(req, res) {
   }
 };
 
-exports.saldo = async function(req, res) {
+exports.saldo = async (req, res) => {
   try {
     const lancamentos = await LancamentoCaixa.find({});
     var saldo = 0;

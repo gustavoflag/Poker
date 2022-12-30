@@ -1,13 +1,12 @@
-var sortBy = require('sort-by');
-var mongoose = require('mongoose'),
-  Jogo = mongoose.model('Jogo'),
-  Jogador = mongoose.model('Jogador'),
-  Pontuacao = mongoose.model('Pontuacao'),
-  Parametro = mongoose.model('Parametro'),
-  LancamentoCaixa = mongoose.model('LancamentoCaixa');
-ClassificacaoEtapa = mongoose.model('ClassificacaoEtapa');
-var jogadorController = require('./jogadorController.js');
-
+const mongoose = require('mongoose');
+const sortBy = require('sort-by');
+const jogadorController = require('./jogadorController.js');
+const Jogo = mongoose.model('Jogo');
+const Jogador = mongoose.model('Jogador');
+const Pontuacao = mongoose.model('Pontuacao');
+const Parametro = mongoose.model('Parametro');
+const LancamentoCaixa = mongoose.model('LancamentoCaixa');
+const ClassificacaoEtapa = mongoose.model('ClassificacaoEtapa');
 
 exports.listar = async (req, res) => {
   try {
@@ -180,8 +179,9 @@ exports.inserir = async (req, res) => {
         var lctoCaixaTaxaLimpeza = new LancamentoCaixa({ data: novoJogo.data, valor: valorTaxaLimpeza, descricao: 'Taxa limpeza - data: ' + strData, idJogo: jogo._id });
         await lctoCaixaTaxaLimpeza.save();
 
-        await jogadorController.gerarClassificacaoEtapa(jogo.numero);
-        return res.json(jogo);
+        jogadorController.gerarClassificacaoEtapa(jogo.numero, function(err, classificacao){
+          return res.json(jogo);
+        });
       }
     });
   } catch (err) {

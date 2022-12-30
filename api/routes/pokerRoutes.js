@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function(app) {
+module.exports = (app) => {
   const pontuacaoController = require('../controllers/pontuacaoController.js');
   const premiacaoController = require('../controllers/premiacaoController.js');
   const jogadorController = require('../controllers/jogadorController.js');
@@ -53,6 +53,9 @@ module.exports = function(app) {
   
   app.route('/jogador/porNome/:nomeJogador')
     .get(jogadorController.consultarPorNome);
+  
+  // app.route('/jogador/excluirPontuacaoEtapas')
+  //   .post(jogadorController.excluirPontuacaoEtapas);
 
   app.route('/classificacao')
     .get(jogadorController.classificacao);
@@ -138,4 +141,5 @@ module.exports = function(app) {
 
   app.route('/preJogo/excluirJogador')
     .post(authGuard.isAuthenticated, preJogoController.excluirJogador);
+
 };

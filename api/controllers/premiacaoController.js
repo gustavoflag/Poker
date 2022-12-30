@@ -1,66 +1,77 @@
-var sortBy = require('sort-by');
-var mongoose = require('mongoose'),
-Premiacao = mongoose.model('Premiacao');
+const sortBy = require('sort-by');
+const mongoose = require('mongoose');
+const Premiacao = mongoose.model('Premiacao');
 
-exports.listar = function(req, res) {
-  Premiacao.find({}, function(err, premiacoes) {
-    if (err)
-      return res.status(440).json(err);
+exports.listar = async (req, res) => {
+  try {
+    const premiacoes = await Premiacao.find({});
+
     return res.json(premiacoes.sort(sortBy('lugar')));
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.inserir = function(req, res) {
-  var novaPremiacao = new Premiacao(req.body);
-  novaPremiacao.save(function(err, premiacao) {
-    if (err)
-      return res.status(440).json(err);
+exports.inserir = async (req, res) => {
+  try {
+    var novaPremiacao = new Premiacao(req.body);
+    await novaPremiacao.save();
+
     return res.json(premiacao);
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };
 
-exports.inserirLote = async function(req, res) {
-  var premiacoes = req.body;
+exports.inserirLote = async (req, res) => {
+  try {
+    var premiacoes = req.body;
 
-  var count = 0;
-  premiacoes.forEach((pontuacaoBody) => {
-    var novaPremiacao = new Premiacao(pontuacaoBody);
+    var count = 0;
+    premiacoes.forEach(async (pontuacaoBody) => {
+      var novaPremiacao = new Premiacao(pontuacaoBody);
 
-    novaPremiacao.save(function(err, task) {
-      if (err)
-        return res.status(440).json(err);
+      await novaPremiacao.save();
+
+      count++;
+      if (count === premiacoes.length) {
+        return res.json(premiacoes);
+      }
+    });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
+};
+
+
+exports.consultar = async (req, res) => {
+  try {
+    const premiacao = await Premiacao.findById(req.params.premiacaoId);
+
+    return res.json(premiacao);
+  } catch (err) {
+    return res.status(440).json(err);
+  }
+};
+
+exports.alterar = async (req, res) => {
+  try {
+    const premiacao = await Premiacao.findOneAndUpdate({ _id: req.params.premiacaoId }, req.body, { new: true });
+
+    return res.json(premiacao);
+  } catch (err) {
+    return res.status(440).json(err);
+  }
+};
+
+exports.excluir = async (req, res) => {
+  try {
+    Premiacao.remove({
+      _id: req.params.premiacaoId
     });
 
-    count++;
-    if (count === premiacoes.length){
-      return res.json(premiacoes);
-    }
-  });
-};
-
-
-exports.consultar = function(req, res) {
-  Premiacao.findById(req.params.premiacaoId, function(err, premiacao) {
-    if (err)
-      return res.status(440).json(err);
-    return res.json(premiacao);
-  });
-};
-
-exports.alterar = function(req, res) {
-  Premiacao.findOneAndUpdate({_id: req.params.premiacaoId}, req.body, {new: true}, function(err, premiacao) {
-    if (err)
-      return res.status(440).json(err);
-    return res.json(premiacao);
-  });
-};
-
-exports.excluir = function(req, res) {
-  Premiacao.remove({
-    _id: req.params.premiacaoId
-  }, function(err, task) {
-    if (err)
-      return res.status(440).json(err);
     return res.json({ message: 'Premiação excluída' });
-  });
+  } catch (err) {
+    return res.status(440).json(err);
+  }
 };

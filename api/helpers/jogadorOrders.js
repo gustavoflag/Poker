@@ -1,12 +1,11 @@
-//Ordenações
-exports.compararPontos = function(a, b){
+exports.compararPontos = (a, b) => {
   var diffPontos = (a.pontos - b.pontos);
   if (diffPontos != 0){
     return diffPontos * -1;
   }
-}
+};
 
-exports.compararVitorias = function(a, b){
+exports.compararVitorias = (a, b) => {
   if (a.qtdVitorias && b.qtdVitorias){
     var diffVitorias = (a.qtdVitorias - b.qtdVitorias);
     if (diffVitorias != 0){
@@ -31,16 +30,16 @@ exports.compararVitorias = function(a, b){
   if (diffJogos != 0){
     return diffJogos;
   }
-}
+};
 
-exports.compararHUs = function(a, b){
+exports.compararHUs = (a, b) => {
   var diffHUs = (a.qtdHUs - b.qtdHUs);
   if (diffHUs != 0){
     return diffHUs * -1;
   }
 }
 
-exports.compararSaldo = function(a, b){
+exports.compararSaldo = (a, b) => {
   var diffSaldo = ((a.valorRecebido - a.valorInvestido) - (b.valorRecebido - b.valorInvestido));
   if (diffSaldo != 0){
     return diffSaldo * -1;
@@ -60,9 +59,9 @@ exports.compararSaldo = function(a, b){
   if (diffJogos != 0){
     return diffJogos;
   }
-}
+};
 
-exports.compararVezesDealer = function(a, b){
+exports.compararVezesDealer = (a, b) => {
   var diffqtdVezesDealer = (a.qtdVezesDealer - b.qtdVezesDealer);
   if (diffqtdVezesDealer != 0){
     return diffqtdVezesDealer;
@@ -72,9 +71,9 @@ exports.compararVezesDealer = function(a, b){
   if (diffJogos != 0){
     return diffJogos;
   }
-}
+};
 
-exports.compararValorRecebido = function(a, b){
+exports.compararValorRecebido = (a, b) =>{
   var diffValorRecebido = (a.valorRecebido - b.valorRecebido);
   if (diffValorRecebido != 0){
     return diffValorRecebido * -1;
@@ -94,10 +93,10 @@ exports.compararValorRecebido = function(a, b){
   if (diffJogos != 0){
     return diffJogos;
   }
-}
+};
 
 
-exports.compararPontosPorJogo = function(a, b){
+exports.compararPontosPorJogo = (a, b) => {
   var diffPontosPorJogo = (a.pontosPorJogo - b.pontosPorJogo);
   if (diffPontosPorJogo != 0){
     return diffPontosPorJogo * -1;
@@ -117,23 +116,23 @@ exports.compararPontosPorJogo = function(a, b){
   if (diffJogos != 0){
     return diffJogos;
   }
-}
+};
 
-exports.compararMediaPosicao = function(a, b){
+exports.compararMediaPosicao = (a, b) => {
   var diffMediaPosicao = (a.mediaPosicao - b.mediaPosicao);
   if (diffMediaPosicao != 0){
     return diffMediaPosicao;
   }
-}
+};
 
-exports.compararPontuacoes = function(a, b){
+exports.compararPontuacoes = (a, b) => {
   var diffPontuacoes = (a.qtdPontuacoes - b.qtdPontuacoes);
   if (diffPontuacoes != 0){
     return diffPontuacoes * -1;
   }
-}
+};
 
-exports.compararJogadores = function(a, b){
+exports.compararJogadores = (a, b) => {
   var diffPontos = (a.pontos - b.pontos);
   if (diffPontos != 0){
     return diffPontos * -1;
@@ -156,4 +155,4 @@ exports.compararJogadores = function(a, b){
   if (diffJogos != 0){
     return diffJogos;
   }
-}
+};
