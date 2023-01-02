@@ -100,7 +100,7 @@ exports.inserir = async (req, res) => {
       participante.valorInvestido = parametro.valorBuyIn + parametro.valorMaleta;
 
       if (!participante.rebuy) {
-        var pontuacao = pontuacoes.find(function (element, index, array) { return element.lugar === participante.lugar });
+        var pontuacao = pontuacoes.find((pontuacao) => pontuacao.lugar === participante.lugar);
 
         if (pontuacao) {
           participante.pontos = pontuacao.pontos;
@@ -277,14 +277,18 @@ exports.excluir = async (req, res) => {
         var historicoPosicao;
 
         if (participante.rebuy > 0) {
-          historicoPosicao = jogadorParticipante.historicoJogos.find(function (element, index, array) { return element.lugar === -1 });
+          historicoPosicao = jogadorParticipante.historicoJogos.find((element) => element.lugar === -1);
         } else {
-          historicoPosicao = jogadorParticipante.historicoJogos.find(function (element, index, array) { return element.lugar === participante.lugar });
+          historicoPosicao = jogadorParticipante.historicoJogos.find((element) => element.lugar === participante.lugar);
         }
 
         if (historicoPosicao) {
           historicoPosicao.quantidade--;
         }
+
+        const indicePontuacao = jogadorParticipante.pontuacaoEtapas.findIndex((pontuacaoEtapa) => pontuacaoEtapa.etapa === jogo.numero);
+        
+        jogadorParticipante.pontuacaoEtapas.splice(indicePontuacao, 1);
 
         await jogadorParticipante.save();
       }
