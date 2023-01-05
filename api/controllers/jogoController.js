@@ -71,26 +71,29 @@ exports.inserir = async (req, res) => {
       valorTaxaLimpeza = parametro.valorTaxaLimpeza;
     }
 
+    const valorBuyInComMaleta = (parametro.valorBuyIn + parametro.valorMaleta);
+
     var premiacaoTotal = (novoJogo.participantes.length * parametro.valorBuyIn)
-      + (qtdeRebuy * (parametro.valorBuyIn + parametro.valorMaleta))
+      + (qtdeRebuy * valorBuyInComMaleta)
       - (valorTaxaLimpeza);
 
     if (!parametro.participantesPremiacaoTerceiro) {
       parametro.participantesPremiacaoTerceiro = 9999;
     }
 
-    //colocar parâmetro
-
     if (novoJogo.participantes.length >= parametro.participantesPremiacaoTerceiro) {
-      premiacaoTerceiro = (parametro.valorBuyIn + parametro.valorMaleta);
-      premiacaoSegundo = ((parametro.valorBuyIn + parametro.valorMaleta) * 2);
-    } else {
-      premiacaoSegundo = (parametro.valorBuyIn + parametro.valorMaleta);
+      premiacaoTerceiro = (premiacaoTotal * (parametro.premiacaoTerceiro / 100));
+      if (premiacaoTerceiro < valorBuyInComMaleta) {
+        premiacaoTerceiro = valorBuyInComMaleta;
+      }
+    }
+
+    premiacaoSegundo = (premiacaoTotal * (parametro.premiacaoSegundo / 100));
+    if (premiacaoSegundo < valorBuyInComMaleta) {
+      premiacaoSegundo = valorBuyInComMaleta;
     }
 
     premiacaoPrimeiro = ((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro));
-
-    //
 
     novoJogo.valorMaleta = novoJogo.participantes.length * parametro.valorMaleta;
 
@@ -179,7 +182,7 @@ exports.inserir = async (req, res) => {
         var lctoCaixaTaxaLimpeza = new LancamentoCaixa({ data: novoJogo.data, valor: valorTaxaLimpeza, descricao: 'Taxa limpeza - data: ' + strData, idJogo: jogo._id });
         await lctoCaixaTaxaLimpeza.save();
 
-        jogadorController.gerarClassificacaoEtapa(jogo.numero, function(err, classificacao){
+        jogadorController.gerarClassificacaoEtapa(jogo.numero, function (err, classificacao) {
           return res.json(jogo);
         });
       }
@@ -287,7 +290,7 @@ exports.excluir = async (req, res) => {
         }
 
         const indicePontuacao = jogadorParticipante.pontuacaoEtapas.findIndex((pontuacaoEtapa) => pontuacaoEtapa.etapa === jogo.numero);
-        
+
         jogadorParticipante.pontuacaoEtapas.splice(indicePontuacao, 1);
 
         await jogadorParticipante.save();
