@@ -16,7 +16,19 @@ const salvarPreJogo = async (res, preJogo, mensagem) => {
 
 exports.consultar = async (req, res) => {
   try {
-    const preJogo = await PreJogo.findOne({});
+    const preJogo = await PreJogo.findOne({}).lean();
+
+    if (preJogo && preJogo.participantes && preJogo.participantes.length >= 6){
+      const qtdJogadores = preJogo.participantes.length;
+
+      var qtdRebuy = 0;
+      for (var i = 0; i < preJogo.participantes.length; i++) {
+        qtdRebuy += preJogo.participantes[i].rebuy;
+      }
+
+      const premiacao = await jogoController.premiacao(qtdJogadores, qtdRebuy);
+      preJogo.estimativaPremio = premiacao;
+    }
 
     return res.json(preJogo);
   } catch (err) {

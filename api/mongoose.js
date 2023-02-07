@@ -14,6 +14,7 @@ module.exports.connect = async () => {
   mongoose.Promise = global.Promise;
 
   const uri = process.env.MONGODB_URI || `mongodb+srv://tqsop:tqsop2023@tqsop2023.bsp7s6t.mongodb.net/tqsop?retryWrites=true&w=majority`; //2023
+  //const uri = process.env.MONGODB_URI || `mongodb+srv://tqsop:tqsop2023@tqsop2023.bsp7s6t.mongodb.net/tqsop_test?retryWrites=true&w=majority`; //2023_test
 
   const mongooseOpts = {
     useNewUrlParser: true,

@@ -56,46 +56,22 @@ exports.inserir = async (req, res) => {
     if (!parametro)
       return res.status(440).json({ errmsg: "Parâmetros não encontrados" });
 
-    var premiacaoPrimeiro = 0;
-    var premiacaoSegundo = 0;
-    var premiacaoTerceiro = 0;
-
     var qtdeRebuy = 0;
 
     for (var i = 0; i < novoJogo.participantes.length; i++) {
       qtdeRebuy += novoJogo.participantes[i].rebuy;
     }
 
-    var valorTaxaLimpeza = 55;
-    if (parametro.valorTaxaLimpeza) {
-      valorTaxaLimpeza = parametro.valorTaxaLimpeza;
-    }
+    const {
+      premiacaoPrimeiro,
+      premiacaoSegundo,
+      premiacaoTerceiro,
+      valorMaleta,
+      valorTaxaLimpeza,
+    } = await this.premiacao(novoJogo.participantes.length, qtdeRebuy);
 
-    const valorBuyInComMaleta = (parametro.valorBuyIn + parametro.valorMaleta);
-
-    var premiacaoTotal = (novoJogo.participantes.length * parametro.valorBuyIn)
-      + (qtdeRebuy * valorBuyInComMaleta)
-      - (valorTaxaLimpeza);
-
-    if (!parametro.participantesPremiacaoTerceiro) {
-      parametro.participantesPremiacaoTerceiro = 9999;
-    }
-
-    if (novoJogo.participantes.length >= parametro.participantesPremiacaoTerceiro) {
-      premiacaoTerceiro = (premiacaoTotal * (parametro.premiacaoTerceiro / 100));
-      if (premiacaoTerceiro < valorBuyInComMaleta) {
-        premiacaoTerceiro = valorBuyInComMaleta;
-      }
-    }
-
-    premiacaoSegundo = (premiacaoTotal * (parametro.premiacaoSegundo / 100));
-    if (premiacaoSegundo < valorBuyInComMaleta) {
-      premiacaoSegundo = valorBuyInComMaleta;
-    }
-
-    premiacaoPrimeiro = ((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro));
-
-    novoJogo.valorMaleta = novoJogo.participantes.length * parametro.valorMaleta;
+    novoJogo.valorMaleta = valorMaleta;
+    //
 
     var count = 0;
 
@@ -315,3 +291,53 @@ exports.excluir = async (req, res) => {
     return res.status(440).json(err);
   }
 };
+
+exports.premiacao = async (qtdParticipantes, qtdRebuy) => {
+  const parametro = await Parametro.findOne({});
+  if (!parametro)
+    return res.status(440).json({ errmsg: "Parâmetros não encontrados" });
+
+  var premiacaoPrimeiro = 0;
+  var premiacaoSegundo = 0;
+  var premiacaoTerceiro = 0;
+  var valorMaleta = 0;
+
+  var valorTaxaLimpeza = 55;
+  if (parametro.valorTaxaLimpeza) {
+    valorTaxaLimpeza = parametro.valorTaxaLimpeza;
+  }
+
+  const valorBuyInComMaleta = (parametro.valorBuyIn + parametro.valorMaleta);
+
+  var premiacaoTotal = (qtdParticipantes * parametro.valorBuyIn)
+    + (qtdRebuy * valorBuyInComMaleta)
+    - (valorTaxaLimpeza);
+
+  if (!parametro.participantesPremiacaoTerceiro) {
+    parametro.participantesPremiacaoTerceiro = 9999;
+  }
+
+  if (qtdParticipantes >= parametro.participantesPremiacaoTerceiro) {
+    premiacaoTerceiro = (premiacaoTotal * (parametro.premiacaoTerceiro / 100));
+    if (premiacaoTerceiro < valorBuyInComMaleta) {
+      premiacaoTerceiro = valorBuyInComMaleta;
+    }
+  }
+
+  premiacaoSegundo = (premiacaoTotal * (parametro.premiacaoSegundo / 100));
+  if (premiacaoSegundo < valorBuyInComMaleta) {
+    premiacaoSegundo = valorBuyInComMaleta;
+  }
+
+  premiacaoPrimeiro = ((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro));
+
+  valorMaleta = qtdParticipantes * parametro.valorMaleta;
+
+  return {
+    premiacaoPrimeiro,
+    premiacaoSegundo,
+    premiacaoTerceiro,
+    valorMaleta,
+    valorTaxaLimpeza
+  }
+}
