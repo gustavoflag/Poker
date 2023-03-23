@@ -142,4 +142,7 @@ module.exports = (app) => {
   app.route('/preJogo/excluirJogador')
     .post(authGuard.isAuthenticated, preJogoController.excluirJogador);
 
+  app.route('/preJogo/alterarDealer')
+    .post(authGuard.isAuthenticated, preJogoController.alterarDealer);
+
 };

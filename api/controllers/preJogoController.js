@@ -229,6 +229,31 @@ exports.sortear = async (req, res) => {
   }
 };
 
+exports.alterarDealer = async (req, res) => {
+  try {
+    const preJogo = await PreJogo.findOne({});
+
+    if (!preJogo) {
+      return res.status(440).json({ message: 'Pré jogo não encontrado' });
+    }
+
+    var novoDealer = preJogo.participantes.filter((par) => par.nomeJogador === req.body.nomeJogador)[0];
+    if (!novoDealer) {
+      return res.status(440).json({ message: 'Jogador não encontrado' });
+    }
+
+    preJogo.participantes.filter((par) => par.mesa === novoDealer.mesa).forEach((participante) => {
+      participante.dealer = false
+    });
+
+    novoDealer.dealer = true;
+
+    await salvarPreJogo(res, preJogo, 'Dealer alterado');
+  } catch (err) {
+    return res.status(440).json(err);
+  }
+};
+
 exports.gerarJogo = async (req, res) => {
   try {
     const preJogo = await PreJogo.findOne({});
