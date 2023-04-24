@@ -7,25 +7,13 @@
     "build": "./node_modules/.bin/netlify-lambda build /"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "express": "^4.15.5",
-    "form-data": "^3.0.0",
-    "jade": "~1.11.0",
-    "jsonwebtoken": "^8.1.0",
-    "mongoose": "^4.13.7",
-    "morgan": "~1.9.0",
-    "multer": "^1.4.2",
-    "netlify-lambda": "^2.0.1",
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "6.0.12",
+    "netlify-lambda": "^2.0.15",
     "random-item": "^1.0.0",
-    "serve-favicon": "~2.4.5",
-    "serverless-http": "^2.5.0",
+    "serverless-http": "^2.7.0",
     "sort-by": "^1.2.0"
-  },
-  "engines": {
-    "node": "9.3.0"
   }
 }
