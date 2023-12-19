@@ -8,6 +8,8 @@ module.exports = (app) => {
   const parametroController = require('./controllers/parametroController.js');
   const lancamentoCaixaController = require('./controllers/lancamentoCaixaController.js');
   const preJogoController = require('./controllers/preJogoController.js');
+  const agendamentoController = require('./controllers/agendamentoController.js');
+  const localController = require('./controllers/localController.js')
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
@@ -145,4 +147,31 @@ module.exports = (app) => {
   app.route('/preJogo/alterarDealer')
     .post(authGuard.isAuthenticated, preJogoController.alterarDealer);
 
+  app.route('/local')
+    .get(localController.listar)
+    .post(authGuard.isAuthenticated, localController.inserir);
+
+  app.route('/local/:localId')
+    .get(localController.consultar)
+    .put(authGuard.isAuthenticated, localController.alterar)
+    .delete(authGuard.isAuthenticated, localController.excluir);
+
+  app.route('/agendamento')
+    .get(agendamentoController.listar)
+    .post(authGuard.isAuthenticated, agendamentoController.inserir);
+
+  app.route('/agendamento/:agendamentoId')
+    .get(agendamentoController.consultar)
+    .put(authGuard.isAuthenticated, agendamentoController.alterar)
+    .delete(authGuard.isAuthenticated, agendamentoController.excluir);
+
+  app.route('/proximosAgendamentos')
+    .get(agendamentoController.listarProximos);
+
+  app.route('/proximosAgendamentos/:qtd')
+    .get(agendamentoController.listarProximos);
+
+  app.route('/todosAgendamentos/:ano')
+    //.post(agendamentoController.inserirAnoTodo);
+    .post(authGuard.isAuthenticated, agendamentoController.inserirAnoTodo);
 };
