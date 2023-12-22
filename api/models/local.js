@@ -7,7 +7,7 @@ var LocalSchema = new Schema({
     type: String,
     required: 'Nome é obrigatório'
   },
-  endereço: {
+  endereco: {
     type: String
   },
   padrao: {
