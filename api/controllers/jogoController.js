@@ -68,6 +68,7 @@ exports.inserir = async (req, res) => {
       premiacaoTerceiro,
       valorMaleta,
       valorTaxaLimpeza,
+      valorCaixa
     } = await this.premiacao(novoJogo.participantes.length, qtdeRebuy);
 
     novoJogo.valorMaleta = valorMaleta;
@@ -76,7 +77,7 @@ exports.inserir = async (req, res) => {
     var count = 0;
 
     novoJogo.participantes.forEach(async (participante) => {
-      participante.valorInvestido = parametro.valorBuyIn + parametro.valorMaleta;
+      participante.valorInvestido = parametro.valorBuyIn + parametro.valorMaleta + parametro.valorCaixa;
 
       if (!participante.rebuy) {
         var pontuacao = pontuacoes.find((pontuacao) => pontuacao.lugar === participante.lugar);
@@ -85,7 +86,7 @@ exports.inserir = async (req, res) => {
           participante.pontos = pontuacao.pontos;
         }
       } else {
-        participante.valorInvestido += ((parametro.valorBuyIn + parametro.valorMaleta) * participante.rebuy);
+        participante.valorInvestido += ((parametro.valorBuyIn + parametro.valorMaleta + parametro.valorCaixa) * participante.rebuy);
       }
 
       if (parametro.pontosExtraKO && parametro.pontosExtraKO > 0) {
@@ -152,11 +153,14 @@ exports.inserir = async (req, res) => {
 
         var strData = (novoJogo.data.getDate() + '/' + (novoJogo.data.getMonth() + 1) + '/' + novoJogo.data.getFullYear());
 
-        var lctoCaixa = new LancamentoCaixa({ data: novoJogo.data, valor: novoJogo.valorMaleta, descricao: 'Jogo - data: ' + strData, idJogo: jogo._id });
-        await lctoCaixa.save();
+        var lctoPremio = new LancamentoCaixa({ data: novoJogo.data, conta: 'premio', valor: novoJogo.valorMaleta, descricao: `Jogo #${novoJogo.numero} - data: ${strData}`, idJogo: jogo._id });
+        await lctoPremio.save();
 
-        var lctoCaixaTaxaLimpeza = new LancamentoCaixa({ data: novoJogo.data, valor: valorTaxaLimpeza, descricao: 'Taxa limpeza - data: ' + strData, idJogo: jogo._id });
-        await lctoCaixaTaxaLimpeza.save();
+        var lctoLimpeza = new LancamentoCaixa({ data: novoJogo.data, conta: 'limpeza', valor: valorTaxaLimpeza, descricao: `Taxa limpeza #${novoJogo.numero} - data: ${strData}`, idJogo: jogo._id });
+        await lctoLimpeza.save();
+
+        var lctoCaixa = new LancamentoCaixa({ data: novoJogo.data, conta: 'caixa', valor: valorCaixa, descricao: `Caixa Jogo #${novoJogo.numero} - data: ${strData}`, idJogo: jogo._id });
+        await lctoCaixa.save();
 
         jogadorController.gerarClassificacaoEtapa(jogo.numero, function (err, classificacao) {
           return res.json(jogo);
@@ -332,12 +336,14 @@ exports.premiacao = async (qtdParticipantes, qtdRebuy) => {
   premiacaoPrimeiro = ((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro));
 
   valorMaleta = qtdParticipantes * parametro.valorMaleta;
+  valorCaixa = (qtdParticipantes + qtdRebuy) * parametro.valorCaixa;
 
   return {
     premiacaoPrimeiro,
     premiacaoSegundo,
     premiacaoTerceiro,
     valorMaleta,
-    valorTaxaLimpeza
+    valorTaxaLimpeza,
+    valorCaixa
   }
 }

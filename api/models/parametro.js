@@ -34,6 +34,9 @@ var ParametroSchema = new Schema({
   },
   valorTaxaLimpeza: {
     type: Number
+  }, 
+  valorCaixa: {
+    type: Number
   }
 });
 

@@ -9,6 +9,11 @@ var LancamentoCaixaSchema = new Schema({
     default: Date.now,
     required: 'Data é obrigatório!'
   },
+  conta: {
+    type: String,
+    enum: ['premio', 'caixa', 'limpeza'],
+    default: 'premio'
+  },
   valor: {
     type: Number,
     default: 0

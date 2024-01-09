@@ -114,12 +114,14 @@ module.exports = (app) => {
   app.route('/tema')
     .get(parametroController.tema);
 
-  app.route('/saldoCaixa')
+  app.route('/saldoCaixa/:contaId')
     .get(lancamentoCaixaController.saldo)
 
   app.route('/lancamentoCaixa')
-    .get(lancamentoCaixaController.listar)
     .post(authGuard.isAuthenticated, lancamentoCaixaController.inserir);
+
+  app.route('/lancamentoCaixa/conta/:contaId')
+    .get(lancamentoCaixaController.listar);
 
   app.route('/lancamentoCaixa/:lancamentoCaixaId')
     .get(lancamentoCaixaController.consultar)

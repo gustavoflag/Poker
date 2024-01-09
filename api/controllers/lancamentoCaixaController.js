@@ -4,7 +4,7 @@ const LancamentoCaixa = mongoose.model('LancamentoCaixa');
 
 exports.listar = async (req, res) => {
   try {
-    const lancamentos = await LancamentoCaixa.find({});
+    const lancamentos = await LancamentoCaixa.find({ conta: req.params.contaId });
     return res.json(lancamentos.sort(sortBy('-data')));
   } catch (err) {
     return res.status(440).json(err);
@@ -53,7 +53,7 @@ exports.excluir = async (req, res) => {
 
 exports.saldo = async (req, res) => {
   try {
-    const lancamentos = await LancamentoCaixa.find({});
+    const lancamentos = await LancamentoCaixa.find({ conta: req.params.contaId });
     var saldo = 0;
 
     lancamentos.forEach(function (lancamento){
