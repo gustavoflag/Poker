@@ -10,7 +10,7 @@
     "body-parser": "^1.19.2",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "6.0.12",
+    "mongoose": "6.4.6",
     "netlify-lambda": "^2.0.15",
     "random-item": "^1.0.0",
     "serverless-http": "^2.7.0",
