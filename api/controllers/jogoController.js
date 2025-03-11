@@ -53,6 +53,10 @@ exports.inserir = async (req, res) => {
     if (!tipoPontuacao){
       return res.status(440).json({ errmsg: "Pontuações não encontradas" });
     }
+
+    if (tipoPontuacao.pontuacoes.find((pontuacao) => pontuacao.lugar === 1).pontos < 25) {
+      novoJogo.observacoes = "Etapa com pontuação parcial";
+    }
       
     const parametro = await Parametro.findOne({});
     if (!parametro)
@@ -324,14 +328,16 @@ exports.premiacao = async (qtdParticipantes, qtdRebuy) => {
 
   if (qtdParticipantes >= parametro.participantesPremiacaoTerceiro) {
     premiacaoTerceiro = (premiacaoTotal * (parametro.premiacaoTerceiro / 100));
-    if (premiacaoTerceiro < valorBuyInComMaleta) {
-      premiacaoTerceiro = valorBuyInComMaleta;
+    if (premiacaoTerceiro < valorBuyInComMaleta + parametro.valorCaixa) {
+      premiacaoTerceiro = valorBuyInComMaleta + parametro.valorCaixa;
     }
-  }
 
-  premiacaoSegundo = (premiacaoTotal * (parametro.premiacaoSegundo / 100));
-  if (premiacaoSegundo < valorBuyInComMaleta) {
-    premiacaoSegundo = valorBuyInComMaleta;
+    premiacaoSegundo = (premiacaoTotal * (parametro.premiacaoSegundo / 100));
+    if (premiacaoSegundo < valorBuyInComMaleta + parametro.valorCaixa) {
+      premiacaoSegundo = valorBuyInComMaleta + parametro.valorCaixa;
+    }
+  } else {
+    premiacaoSegundo = valorBuyInComMaleta + parametro.valorCaixa;
   }
 
   premiacaoPrimeiro = ((premiacaoTotal - premiacaoSegundo - premiacaoTerceiro));

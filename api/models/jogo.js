@@ -22,7 +22,11 @@ var JogoSchema = new Schema({
   numero: {
     type: Number,
     default: 0
-  }
+  },
+  observacoes: {
+    type: String,
+    default: ''
+  },
 });
 
 module.exports = mongoose.model('Jogo', JogoSchema);
