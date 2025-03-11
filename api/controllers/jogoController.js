@@ -7,6 +7,7 @@ const Pontuacao = mongoose.model('Pontuacao');
 const Parametro = mongoose.model('Parametro');
 const LancamentoCaixa = mongoose.model('LancamentoCaixa');
 const ClassificacaoEtapa = mongoose.model('ClassificacaoEtapa');
+const TipoPontuacao = mongoose.model('TipoPontuacao');
 
 exports.listar = async (req, res) => {
   try {
@@ -40,7 +41,7 @@ exports.inserir = async (req, res) => {
 
     const jog = await Jogo.find({}).limit(1).sort({ numero: -1 }).exec();
 
-    if (jog && jog !== [] && jog[0]) {
+    if (jog && jog.length > 0 && jog[0]) {
       novoJogo.numero = jog[0].numero + 1;
     }
 
@@ -48,10 +49,11 @@ exports.inserir = async (req, res) => {
       novoJogo.numero = 1;
     }
 
-    const pontuacoes = await Pontuacao.find({});
-    if (!pontuacoes)
+    const tipoPontuacao = await TipoPontuacao.findOne({ maxJogadores: { $gte: novoJogo.participantes.length }, minJogadores: { $lte: novoJogo.participantes.length } });
+    if (!tipoPontuacao){
       return res.status(440).json({ errmsg: "Pontuações não encontradas" });
-
+    }
+      
     const parametro = await Parametro.findOne({});
     if (!parametro)
       return res.status(440).json({ errmsg: "Parâmetros não encontrados" });
@@ -72,7 +74,6 @@ exports.inserir = async (req, res) => {
     } = await this.premiacao(novoJogo.participantes.length, qtdeRebuy);
 
     novoJogo.valorMaleta = valorMaleta;
-    //
 
     var count = 0;
 
@@ -80,7 +81,7 @@ exports.inserir = async (req, res) => {
       participante.valorInvestido = parametro.valorBuyIn + parametro.valorMaleta + parametro.valorCaixa;
 
       if (!participante.rebuy) {
-        var pontuacao = pontuacoes.find((pontuacao) => pontuacao.lugar === participante.lugar);
+        var pontuacao = tipoPontuacao.pontuacoes.find((pontuacao) => pontuacao.lugar === participante.lugar);
 
         if (pontuacao) {
           participante.pontos = pontuacao.pontos;

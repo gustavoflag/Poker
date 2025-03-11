@@ -1,6 +1,7 @@
 'use strict';
 module.exports = (app) => {
   const pontuacaoController = require('./controllers/pontuacaoController.js');
+  const tipoPontuacaoController = require('./controllers/tipoPontuacaoController.js');
   const premiacaoController = require('./controllers/premiacaoController.js');
   const jogadorController = require('./controllers/jogadorController.js');
   const jogoController = require('./controllers/jogoController.js');
@@ -9,7 +10,7 @@ module.exports = (app) => {
   const lancamentoCaixaController = require('./controllers/lancamentoCaixaController.js');
   const preJogoController = require('./controllers/preJogoController.js');
   const agendamentoController = require('./controllers/agendamentoController.js');
-  const localController = require('./controllers/localController.js')
+  const localController = require('./controllers/localController.js');
 
   app.route('/pontuacao')
     .get(pontuacaoController.listar)
@@ -24,6 +25,15 @@ module.exports = (app) => {
     .put(authGuard.isAuthenticated, pontuacaoController.alterar)
     .delete(authGuard.isAuthenticated, pontuacaoController.excluir);
 
+  app.route('/tipoPontuacao')
+    .get(tipoPontuacaoController.listar)
+    .post(authGuard.isAuthenticated, tipoPontuacaoController.inserir);
+    
+  app.route('/tipoPontuacao/:tipoPontuacaoId')
+    .get(tipoPontuacaoController.consultar)
+    .put(authGuard.isAuthenticated, tipoPontuacaoController.alterar)
+    .delete(authGuard.isAuthenticated, tipoPontuacaoController.excluir);
+    
   app.route('/premiacao')
     .get(premiacaoController.listar)
     .post(authGuard.isAuthenticated, premiacaoController.inserir);

@@ -97,18 +97,6 @@ var JogadorSchema = new Schema({
   posicaoVitorias:{
     type: Number
   },
-  posicaoHU:{
-    type: Number
-  },
-  posicaoPontuacoes:{
-    type: Number
-  },
-  posicaoPontosPorJogo:{
-    type: Number
-  },
-  posicaoMediaPosicao:{
-    type: Number
-  },
   socio:{
     type: Boolean,
     default: false

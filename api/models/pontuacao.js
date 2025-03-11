@@ -5,13 +5,15 @@ var Schema = mongoose.Schema;
 var PontuacaoSchema = new Schema({
   lugar:{
     type: Number,
-    unique: true,
     required: 'Lugar (colocação) é obrigatório!'
   },
   pontos:{
     type: Number,
     required: '"Pontos" é obrigatório!'
-  }
+  },
 });
 
-module.exports = mongoose.model('Pontuacao', PontuacaoSchema);
+module.exports = { 
+  Schema: PontuacaoSchema,
+  Pontuacao: mongoose.model('Pontuacao', PontuacaoSchema) 
+};
