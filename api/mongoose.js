@@ -1,24 +1,28 @@
-const mongoose = require('mongoose');
-const Pontuacao = require('./models/pontuacao');
-const Premiacao = require('./models/premiacao');
-const Jogador = require('./models/jogador');
-const Jogo = require('./models/jogo');
-const Parametro = require('./models/parametro');
-const LancamentoCaixa = require('./models/lancamentoCaixa');
-const PreJogo = require('./models/preJogo');
-const ClassificacaoEtapa = require('./models/classificacaoEtapa');
-const Relogio = require('./models/relogio');
-const EstruturaRelogio = require('./models/estruturaRelogio');
-const Agendamento = require('./models/agendamento');
-const Local = require('./models/local');
-const TipoPontuacao = require('./models/tipoPontuacao');
+const mongoose = require("mongoose");
+const Pontuacao = require("./models/pontuacao");
+const Premiacao = require("./models/premiacao");
+const Jogador = require("./models/jogador");
+const Jogo = require("./models/jogo");
+const Parametro = require("./models/parametro");
+const LancamentoCaixa = require("./models/lancamentoCaixa");
+const PreJogo = require("./models/preJogo");
+const ClassificacaoEtapa = require("./models/classificacaoEtapa");
+const Relogio = require("./models/relogio");
+const EstruturaRelogio = require("./models/estruturaRelogio");
+const Agendamento = require("./models/agendamento");
+const Local = require("./models/local");
+const TipoPontuacao = require("./models/tipoPontuacao");
 
 module.exports.connect = async () => {
   mongoose.Promise = global.Promise;
-  //const uri = process.env.MONGODB_URI || `mongodb+srv://tqsop:tqsop2023@tqsop2023.bsp7s6t.mongodb.net/tqsop2025?retryWrites=true&w=majority`; //2025
-  //const uri = process.env.MONGODB_URI || `mongodb+srv://tqsop:tqsop2023@tqsop2023.bsp7s6t.mongodb.net/tqsop2024?retryWrites=true&w=majority`; //2024
-  //const uri = process.env.MONGODB_URI || `mongodb+srv://tqsop:tqsop2023@tqsop2023.bsp7s6t.mongodb.net/tqsop?retryWrites=true&w=majority`; //2023
-  const uri = process.env.MONGODB_URI || `mongodb+srv://tqsop:tqsop2023@tqsop2023.bsp7s6t.mongodb.net/tqsop_test?retryWrites=true&w=majority`; //test
+  const uri = process.env.MONGODB_URI;
+
+  if (!uri) {
+    console.error(
+      "FATAL ERROR: MONGODB_URI environment variable is not defined.",
+    );
+    process.exit(1);
+  }
 
   const mongooseOpts = {
     useNewUrlParser: true,
@@ -33,4 +37,4 @@ module.exports.connect = async () => {
 
 module.exports.disconnect = async () => {
   await mongoose.disconnect();
-}
+};

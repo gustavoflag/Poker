@@ -1,3 +1,5 @@
+// Load environment variables from .env file if present
+require('dotenv').config();
 const express = require('express');
 const serverless = require('serverless-http');
 const app = express();
@@ -19,12 +21,15 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
-    jsonwebtoken.verify(req.headers.authorization.split(' ')[1],"Z3bFAL9k1BmiTdn2bDJREsjw2O1pcUh8CNWLBps6BpunSOe2CkjaUVorUzaGDhorA75l7fvMTcYEw03z", function(err, decode){
-      if (err)
-        req.user = undefined;
-      req.user = decode;
-      next();
-    });
+    jsonwebtoken.verify(
+      req.headers.authorization.split(' ')[1],
+      process.env.JWT_SECRET || "RESTFULAPIs",
+      function(err, decode){
+        if (err)
+          req.user = undefined;
+        req.user = decode;
+        next();
+      });
   } else {
     req.user = undefined;
     next();
